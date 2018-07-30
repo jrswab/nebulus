@@ -1,8 +1,8 @@
 <?php
-$dir = '';
+/*$dir = '';
 while (!glob($dir.'hash.php')) {
 	$dir .= '../';
-}
+}*/
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ while (!glob($dir.'hash.php')) {
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<a class="navbar-brand" href="<?php echo $dir; ?>index.php">
-		<img src="<?php echo $dir; ?>img/archieTheArchivonaut.png" width="30" height="30" 
+		<img src="<?php echo $dir; ?>img/favicons/android-chrome-512x512.png" width="30" height="30" 
 			class="d-line-block align-top" alt="Archivatory-Archie">
 			Archivatory
 		</a>

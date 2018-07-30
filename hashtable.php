@@ -21,13 +21,13 @@ if (!empty($_GET['delete'])) {
 
 // Check for add to playlist
 if (!empty($_GET['addPlay'])) {
-	$sqlAddPlay = "UPDATE ".$user." SET playlist=1 WHERE id='".$_GET['addPlay']."'";
+	$sqlAddPlay = "UPDATE ".$user." SET playlist = 1, date = date  WHERE id='".$_GET['addPlay']."'";
 	$runAddPlay = mysqli_query($link, $sqlAddPlay);
 } 
 
 // Check for removal from playlist
 if (!empty($_GET['delPlay'])) {
-	$sqlDelPlay = "UPDATE ".$user." SET playlist=0 WHERE id='".$_GET['delPlay']."'";
+	$sqlDelPlay = "UPDATE ".$user." SET playlist = 0, date = date WHERE id='".$_GET['delPlay']."'";
 	$runDelPlay = mysqli_query($link, $sqlDelPlay);
 }
 

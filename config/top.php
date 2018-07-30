@@ -3,7 +3,7 @@
 session_start();
 
 $dir = '';
-while (!glob($dir.'hash.php')) {
+while (!glob($dir.'hashtable.php')) {
 	$dir .= '../';
 }
 
