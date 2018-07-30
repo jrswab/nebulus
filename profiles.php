@@ -3,7 +3,7 @@ include 'config/top.php';
 
 $timeIs = time();
 
-// uso URI to grab username since user may not be logged in.
+// use URI to grab username since user may not be logged in.
 $fullURI = "$_SERVER[REQUEST_URI]";
 $URIArray = explode('/', $fullURI);
 $endURL = end($URIArray);

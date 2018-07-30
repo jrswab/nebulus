@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
 	$fileError = $_FILES['file']['error']; // define error code
 	$fileType = $_FILES['file']['type']; // grab the file type
 
-	$fileExt = explode('.', $fileName); // separet the file extension from the file name
+	$fileExt = explode('.', $fileName); // separate the file extension from the file name
 	$fileActualExt = strtolower(end($fileExt)); // convert file extension to lowercase
 
 	// allowed file extensions
@@ -82,15 +82,15 @@ if (isset($_POST['submit'])) {
 				}
 			} else {
 				echo "Your file is too big. For best results please keep your file under 500MB.";
-				echo "<br><br><a href='welcome.php'>Return to member upload</a>";
+				echo "<br><br><a href='welcome.php'>Return to upload</a>";
 			}
 		} else {
 			echo "There was an error during uploading. Please try again.";
-			echo "<br><br><a href='welcome.php'>Return to member upload</a>";
+			echo "<br><br><a href='welcome.php'>Return to upload.</a>";
 		}
 	} else {
 		echo "Sorry, the ".$fileActualExt." file type is not supported.";
-		echo "<br><br><a href='welcome.php'>Return to member upload</a>";
+		echo "<br><br><a href='welcome.php'>Return to upload.</a>";
 	}
 }
 
