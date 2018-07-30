@@ -1,21 +1,21 @@
 <?php include 'config/top.php';
 
 $user = htmlspecialchars($_SESSION['username']);
-$proCheck = shell_exec('ls u/ | grep '.$user);
+$proCheck = shell_exec(escapeshellcmd('ls u/ | grep '.$user));
 
 if(!$proCheck) {
-	shell_exec('mkdir u/'.$user);
-	shell_exec('touch u/'.$user.'/index.php');
+	shell_exec(escapeshellcmd('mkdir u/'.$user));
+	shell_exec(escapeshellcmd('touch u/'.$user.'/index.php'));
 	$proPath = '"<?php require \'../../profiles.php\' ?>"';
-	shell_exec("echo ".$proPath." >> u/".$user."/index.php");
+	shell_exec(escapeshellcmd("echo ".$proPath." >> u/".$user."/index.php"));
 }
 	
 // if the feed.php file does not exist, create.
-$feedCheck = shell_exec('ls '.$dir.'u/'.$user.' | grep feed');
+$feedCheck = shell_exec(escapeshellcmd('ls '.$dir.'u/'.$user.' | grep feed'));
 if(!$feedCheck){
-	shell_exec('touch '.$dir.'u/'.$user.'/feed.php');
+	shell_exec(escapeshellcmd('touch '.$dir.'u/'.$user.'/feed.php'));
 	$feedPath = '"<?php require \'../../feeds.php\' ?>"';
-	shell_exec("echo ".$feedPath." >> u/".$user."/feed.php");
+	shell_exec(escapeshellcmd("echo ".$feedPath." >> u/".$user."/feed.php"));
 }
 ?>
 
@@ -25,7 +25,7 @@ if(!$feedCheck){
 			meet all the other Archivonauts!</h4>
 		</div>
 		<br>
-		<form id="upload-form" enctype="multipart/form-data" action="memUp.php" method="POST">
+		<form id="upload-form" enctype="multipart/form-data" action="execs/memUp.php" method="POST">
 			<div class="text-center">
 				<h2>Upload Your File</h2>
 				<p>Max allowed file size is 250MB.</p>

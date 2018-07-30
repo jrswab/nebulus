@@ -16,7 +16,7 @@ if($playlistCheck = $link->query("SELECT playlist FROM '".$user."'")) {
 if (!empty($_GET['delete'])) {
 	$sqlDelete = "DELETE FROM ".$user." WHERE id='".$_GET["delete"]."'";
 	$delRun = mysqli_query($link, $sqlDelete);
-	$rm = shell_exec("rm uploads/".$_GET['delete']);
+	$rm = shell_exec(escapeshellcmd("rm uploads/".$_GET['delete']));
 }
 
 // Check for add to playlist
@@ -48,8 +48,9 @@ $resultCheck = mysqli_num_rows($result);
 				$hash = $row["hash"];
 				$fileSize = round(($row["file_size"]/1000000), 2);
 				$id = $row["id"];
-				$title = htmlspecialchars($row["title"]);
-				$des = htmlspecialchars($row["des"]);
+				// already escaped on upload to server
+				$title = $row["title"];
+				$des = $row["des"];
 
 				// if user playlist column for the content is '0'
 				// show the add button else show the remove button.
@@ -102,8 +103,8 @@ $resultCheck = mysqli_num_rows($result);
 							Your browser does not support the video tag.
 						</video>
 					</div>';
-				} esle {
-					$display = 'The '.ext.' media format is not currently supported';
+				} else {
+					$display = 'The '.$ext.' media format is not currently supported';
 				}
 
 				// echo out content cards for users to see the uploaded file, add a title,

@@ -16,8 +16,8 @@ if (isset($_POST['delAccount'])){
 	$runDelUp = mysqli_query($link, $sqlDelUp);
 	$runDelUser = mysqli_query($link, $sqlDelUser);
 
-	$getProPho = shell_exec('ls ../uploads/profiles/ | grep '.$user);
-	shell_exec('rm ../uploads/profiles/'.$getProPho);
+	$getProPho = shell_exec(escapeshellcmd('ls ../uploads/profiles/ | grep '.$user));
+	shell_exec(escapeshellcmd('rm ../uploads/profiles/'.$getProPho));
 
 	if ($runDelUp) {
 		if ($runDelUser) {

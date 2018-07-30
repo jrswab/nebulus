@@ -4,12 +4,12 @@ session_start();
  
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-  header("location: login.php");
+  header("location: ../login.php");
   exit;
 }
 
 // Loging info for database contianing user tables.
-include_once 'config/uploadDBconfig.php';
+include_once '../config/uploadDBconfig.php';
 
 // Check if a table call 'username' exists
 if ($tableCheck = $link->query("SHOW TABLES LIKE '".htmlspecialchars($_SESSION['username'])."'")) {
@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
 		if ($fileError === 0) { // check for no error codes
 			if ($fileSize < 251000000) { // make sure file size is less than 251MB
 				$fileNameNew = uniqid('', true).".".$fileActualExt; // give the upload a uniqe name
-				$fileDestination = 'uploads/'.$fileNameNew; // define file upload end location
+				$fileDestination = '../uploads/'.$fileNameNew; // define file upload end location
 				move_uploaded_file($fileTmpName, $fileDestination); // move the file
 				// Appache runs IPFS upload command
 				$output = shell_exec(escapeshellcmd("ipfs add ".$fileDestination." 2>&1"));
@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
 
 				// if INSERT is successful send user to their hash table else echo error
 				if ($runSql === true) {
-					header("Location: hashtable.php");
+					header("Location: ../hashtable.php");
 				} else {
 					echo "Error: " . $sqlAdd . "<br />" . $link->error;
 					echo "<br><br>Please copy this page or take a screen shot and send it to 

@@ -69,8 +69,9 @@ if(!$feed){
 				// define playlist data
 				$hash = $row["hash"];
 				$id = $row["id"];
-				$title = htmlspecialchars($row["title"]);
-				$des = htmlspecialchars($row["des"]);
+				// already escaped on upload
+				$title = $row["title"];
+				$des = $row["des"];
 
 				// set up for content display
 				$fileExt = explode('.', $id);
