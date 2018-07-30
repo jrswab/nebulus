@@ -77,24 +77,33 @@ $resultCheck = mysqli_num_rows($result);
 				$fileExt = explode('.', $id);
 				$ext = strtolower(end($fileExt));
 				$images = array('jpg', 'jpeg', 'png');
-				$audios = array('mp3', 'ogg');
+				$audios = array('mp3');
 				$videos = array('mp4', 'm4v', 'webm');
 				
 				// determine how to show the content
 				if (in_array($ext, $images)){
-					$display = '<img src="uploads/'.$id.'" style="width:100%" />'; 
+					$display = '
+					<div style="width:100%">
+						<img src="uploads/'.$id.'" style="width:100%" />
+					</div>';
 				} else if (in_array($ext, $audios)){
 					$display = '
+					<div style="width:100%">
 						<audio controls style="width:100%">
 							<source src="uploads/'.$id.'" type="audio/'.$ext.'">
 							Your browser does not support the audio tag.
-						</audio>';
+						</audio>
+					</div>';
 				} else if (in_array($ext, $videos)){
 					$display = '
+					<div style="width:100%">
 						<video style="width:100%" controls>
 							<source src="uploads/'.$id.'" type="video/'.$ext.'">
 							Your browser does not support the video tag.
-						</video>';
+						</video>
+					</div>';
+				} esle {
+					$display = 'The '.ext.' media format is not currently supported';
 				}
 
 				// echo out content cards for users to see the uploaded file, add a title,

@@ -83,7 +83,7 @@ if(!$feed){
 				if (in_array($ext, $images)){
 					$display = '
 					<div style="width:100%">
-					<img src="'.$dir.'uploads/'.$id.'" style="width: 100%%" />
+					<img src="'.$dir.'uploads/'.$id.'" style="width:100%" />
 					</div>';
 				} else if (in_array($ext, $audios)){
 					$display = '
