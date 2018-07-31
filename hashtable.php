@@ -78,18 +78,18 @@ $resultCheck = mysqli_num_rows($result);
 				$fileExt = explode('.', $id);
 				$ext = strtolower(end($fileExt));
 				$images = array('jpg', 'jpeg', 'png');
-				$audios = array('mp3');
+				$audios = array('mp3', 'wav');
 				$videos = array('mp4', 'm4v', 'webm');
 				
 				// determine how to show the content
 				if (in_array($ext, $images)){
 					$display = '
-					<div style="width:100%">
-						<img src="uploads/'.$id.'" style="width:100%" />
+					<div class="card-img-top"  style="width:100%">
+						<img  src="uploads/'.$id.'" style="width:100%" />
 					</div>';
 				} else if (in_array($ext, $audios)){
 					$display = '
-					<div style="width:100%">
+					<div class="card-img-top"  style="width:100%">
 						<audio controls style="width:100%">
 							<source src="uploads/'.$id.'" type="audio/'.$ext.'">
 							Your browser does not support the audio tag.
@@ -97,41 +97,42 @@ $resultCheck = mysqli_num_rows($result);
 					</div>';
 				} else if (in_array($ext, $videos)){
 					$display = '
-					<div style="width:100%">
+					<div class="card-img-top"  style="width:100%">
 						<video style="width:100%" controls>
 							<source src="uploads/'.$id.'" type="video/'.$ext.'">
 							Your browser does not support the video tag.
 						</video>
 					</div>';
 				} else {
-					$display = 'The '.$ext.' media format is not currently supported';
+					$display = '<h5 style="text-align:center;padding:15px;">The '.$ext.
+						' media format is not currently supported.</h5>';
 				}
 
 				// echo out content cards for users to see the uploaded file, add a title,
 				// add a description, grad the link, add to their playlist,
 				// and delete the content from the server.
 				echo '
-				<div class="card border-dark mb-3" style="min-width:99%" >
-					<div class="card-header bg-secondary text-light"><h4>'.$fileName.'</h4></div>
+				<div class="card mb-3" style="min-width:100%" >
+					'.$display.'
 					<div class="card-body text-dark">
-						<div class="d-flex justify-content-center">'.$display.'</div>
-						<br />
-						<form enctype="multipart/form-data" action="execs/rssMeta.php" method="POST">
-							<span style="font-weight: bold">Title:</span>
-							<input name="title" type="text" class="form-control" placeholder="'.$title.'"><br />
-							<span style="font-weight: bold">Description:</span>
-							<textarea name="des" class="form-control" rows="3" placeholder="'.$des.'"></textarea><br />
-							<input type="hidden" name="rowID" value="'.$id.'">
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</form><br />
-
+						<h3 class="card-title">'.$fileName.'</h3>
 						<p class="card-text">
+							<form enctype="multipart/form-data" action="execs/rssMeta.php" method="POST">
+								<span style="font-weight: bold">Title:</span>
+								<input name="title" type="text" class="form-control" placeholder="'
+									.$title.'"><br />
+								<span style="font-weight: bold">Description:</span>
+								<textarea name="des" class="form-control" rows="3" placeholder="'
+									.$des.'"></textarea><br />
+								<input type="hidden" name="rowID" value="'.$id.'">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form><br />
+
 							<strong>File Type: </strong>'.$ext.'<br />
 							<strong>IPFS Link: </strong>
 							<a href="https://ipfs.io/ipfs/'.$hash.'" target="_blank">'.$hash.'</a><br />
 							<strong>Size: </strong>'.$fileSize.' MB
 						</p>
-						<p class="card-text"></p>
 
 						<div class="row">
 							<div class="col d-flex justify-content-start">
