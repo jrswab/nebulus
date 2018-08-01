@@ -32,7 +32,7 @@ if (!empty($_GET['pinHash'])) {
 }
 ?>
 
-			<h2>Welcome to Archivatory.</h2>
+			<h2>Welcome to Nebulus.</h2>
 			<h4>More features are coming soon so make sure to join us on 
 			<a href="https://discord.gg/dKDuaST" target="_blank">Discord</a> and 
 			meet all the other Archivonauts!</h4>
@@ -78,7 +78,7 @@ if (!empty($_GET['pinHash'])) {
 				we are federated with nodes around the world you can be sure that at your 
 				IPFS content will always have accessability even if a site deletes your 
 				content.</p>
-				<p>Since pinned content does not use Archivatory as it's primary storage 
+				<p>Since pinned content does not use Nebulus as it's primary storage 
 				location a STEEM transaction is needed to help support the cost of the 
 				server. If you want to use our service free of charge, please upload your 
 				content here and then use the hash on the site of your choice.</p>
@@ -134,7 +134,7 @@ if (!empty($_GET['pinHash'])) {
 			forever.</p>
 			<p class="alert alert-warning">
 				<strong>This is still a beta service!</strong> Please do not use this as 
-				a backup service. We are still in the early stages of Archivatory and 
+				a backup service. We are still in the early stages of Nebulus and 
 				don't want you to lose your data. Always save a copy on an external hard drive and a separate cloud service for redundancy.</p>
 		
 		<h3>How To Use:</h3>
