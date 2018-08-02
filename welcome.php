@@ -103,18 +103,18 @@ if (!empty($_GET['pinHash'])) {
 					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
 						echo '<br /><br />
 							<div class="text-center">
-								<h5>Copy the line below and send a 1 STEEM transfer to @swab with the 
+								<h5>Copy the line below and send a 1 STEEM transfer to @nebulus with the 
 								line below as the memo:</h5>
 								<p>Anyless or anymore STEEM sent will be returned without pinning. If 
 								you want to support the project by donating STEEM just send with a 
 								thank you memo.</p><br />
 								<div class="d-inline-flex card border-dark">
 									<div style="padding:10px">
-										'.$steemName .' ' .$pinHash.'
+										pin '.$pinHash.'
 									</div>
 								</div>
 									<h5><br />or <a href="https://v2.steemconnect.com/sign/transfer?from='
-									.$steemName.'&to=swab&amount=1.000%20STEEM&memo='.$pinHash.'" target="_blank"> 
+									.$steemName.'&to=nebulus&amount=1.000%20STEEM&memo=pin%20'.$pinHash.'" target="_blank"> 
 									use SteemConnect!</a></h5>
 							</div>';
 					} else {
