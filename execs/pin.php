@@ -11,5 +11,12 @@ for($i = 0; $i < $blocks; $i++){
 }
 
 echo var_dump($justHash)."<br /><br />";
-
-echo shell_exec("ipfs refs local 2>&1");
+foreach ($justHash as $value) {
+	$found = shell_exec("ipfs refs local | grep ".$value." 2>&1");
+	if($found){
+		echo $found."<br />";
+	} else {
+		echo $value." not found on the server <br />";
+	}
+}
+//echo shell_exec("ipfs pin add Qmbz2b8nf8YRgkuzX4grTpDfeFXVJQzDTcteu3Dj616Du5");
