@@ -11,6 +11,14 @@ In order to keep Nebulus from becoming just another "holder-of-files" make sure 
 `ipfs swarm connect /ip4/139.99.131.59/tcp/6537/ipfs/QmYUTAbwZWck3LW9XZBcHTz2Jaip3mGfYDt3LTXdPLEh23`
 
 ## Setting Up Your Own Nebulus:
+### Dependencies:
+- Linux
+- Apache
+- MySQL
+- PHP
+- Python
+- Pip
+  - BEEM
 ### Set Up A LAMP Server:
 For a great guide check out [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04)
 ### Configure Your php.ini file:
