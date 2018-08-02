@@ -88,14 +88,28 @@ if($link === false){
 }
 ```
 ### Full setup script is in the works.
+#### Tell Apache Where the IPFS PATH is Located:
+You should move your IPFS_PATH to /var/www/.ipfs/ after installing go-ipfs.
+`export IPFS_PATH=/var/www/.ipfs/`
+Do this before your have Apache run `ipfs init 2>&1`
+However, just running it as a user or root may not be enough. If you find that
+apache still can not init then you have to add the export line to /etc/apache2/envnars`.
+
+##### On Ubuntu Server 16.04:
+1. `sudo vim /etc/apache2/envvars`
+2. Add `export IPFS_PATH=/var/www/.ipfs/` to the end of the file.
+3. Save and exit.
+4. Run `sudo systemctl restart apache2 && sudo systemctl status apache2`
+5. Test init with `<?php ipfs init 2>&1 ?>` as init.php
+
 #### Configure IPFS
 ```
 <?php
 // have apache set up ipfs
-$initIPFS = shell_exec("ipfs init 2&>1");
+$initIPFS = shell_exec("ipfs init 2>&1");
 
 // Tell IPFS not to use local network discovery
-$mdnOff = shell_exec("ipfs config --json Discovery.MDNS.Enabled false 2&>1");
+$mdnOff = shell_exec("ipfs config --json Discovery.MDNS.Enabled false 2>&1");
 
 // Set IPFS to filter out common local IP addresses
 $filterIPFS = shell_exec("ipfs config --json Swarm.AddrFilters '[
@@ -114,7 +128,7 @@ $filterIPFS = shell_exec("ipfs config --json Swarm.AddrFilters '[
 	\"/ip4/198.51.100.0/ipcidr/24\",
 	\"/ip4/203.0.113.0/ipcidr/24\",
 	\"/ip4/240.0.0.0/ipcidr/4\"
-]' 2&>1");
+]' 2>&1");
 
 // Checking for execution of above commands
 echo $initIPFS;
@@ -125,5 +139,6 @@ if ($filterIPFS) {
 				echo "Swarm filter added.";
 }
 ```
+
 #### Run IPFS as Apache
 `<?php shell_exec("IPFS_FD_MAX=4096 ipfs daemon &"); ?>`
