@@ -73,21 +73,6 @@ if (!empty($_GET['pinHash'])) {
 		<div class="card-body">
 		<form id="pin-form" action="#pinClick" method="GET">
 			<div class="text-center">
-				<p>Already have your content hosted on a site like Dtube and would like to 
-				make sure it sticks around? Our service is the best option for you! Since 
-				we are federated with nodes around the world you can be sure that at your 
-				IPFS content will always have accessability even if a site deletes your 
-				content.</p>
-				<p>Since pinned content does not use Nebulus as it's primary storage 
-				location a STEEM transaction is needed to help support the cost of the 
-				server. If you want to use our service free of charge, please upload your 
-				content here and then use the hash on the site of your choice.</p>
-				<p>It does seem 
-				that sites transcode your content for better storage utilization causing 
-				the IPFS hash to be different than what you get on our website. Uploading 
-				both here and a place like Dtube increases the chance that you will have 
-				two different hashes and thus will not keep your content from disappearing 
-				if the app loses your media.</p>
 				<h4>Steem Account<br />(without "@"):</h4>
 				<input style="width:40%;text-align:center" class="form-input" type="text" name="steemName" 
 					placeholder="eg: jrswab" />
@@ -96,26 +81,34 @@ if (!empty($_GET['pinHash'])) {
 				<input style="width:80%;text-align:center" class="form-input" type="text" name="pinHash" 
 					placeholder="eg: QmTFLiKypBp6RxA6L1XGDhtmMXK5DYpBnVxNcG4yp1HWVT" />
 			</div>
-			<br />
-			<button id="pinClick"  class="btn btn-secondary btn-lg 
+			<br>
+			<div id="pinbar" style="display:none">
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped progress-bar-animated" 
+					role="progressbar" aria-valuenow="100" aria-valuemin="0" 
+					aria-valuemax="100" style="width: 100%"></div>
+				</div>
+				<br>
+			</div>
+			
+			<button id="pinClick" onclick="pinShow()" class="btn btn-secondary btn-lg 
 				btn-block" name="pinSubmit" type="submit">Grab Pin Data</button>
 				<?php 
 					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
+						$sc2cmd = escapeshellcmd('python execs/scPin.py '.$steemName
+							.' "pin '.$pinHash.'"');
+						$sc2Link = shell_exec($sc2cmd);
 						echo '<br /><br />
 							<div class="text-center">
 								<h5>Copy the line below and send a 1 STEEM transfer to @nebulus with the 
 								line below as the memo:</h5>
-								<p>Anyless or anymore STEEM sent will be returned without pinning. If 
-								you want to support the project by donating STEEM just send with a 
-								thank you memo.</p><br />
 								<div class="d-inline-flex card border-dark">
 									<div style="padding:10px">
 										pin '.$pinHash.'
 									</div>
 								</div>
-									<h5><br />or <a href="https://v2.steemconnect.com/sign/transfer?from='
-									.$steemName.'&to=nebulus&amount=1.000%20STEEM&memo=pin%20'.$pinHash.'" target="_blank"> 
-									use SteemConnect!</a></h5>
+									<h5><br />or <a onclick="pinCheck()" 
+									href="'.$sc2Link.'" target="_blank">use SteemConnect!</a></h5>
 							</div>';
 					} else {
 						echo '';
@@ -146,6 +139,23 @@ if (!empty($_GET['pinHash'])) {
 			</ol>
 		</div>
 		
+		<h4>About Pinning</h4>
+		<p>Since pinned content does not use Nebulus as it's primary storage 
+			location a STEEM transaction is needed to help support the cost of the 
+			server. If you want to use our service free of charge, please upload your 
+			content here and then use the hash on the site of your choice.</p>
+		<p>It does seem that sites transcode your content for better storage 
+			utilization causing the IPFS hash to be different than what you get on our 
+			website. Uploading both here and a place like Dtube increases the chance 
+			that you will have two different hashes and thus will not keep your content 
+			from disappearing if the app loses your media.</p>
+
+		<p>Already have your content hosted on a site like Dtube and would like to 
+			make sure it sticks around? Our service is the best option for you! Since 
+			we are federated with nodes around the world you can be sure that at your 
+			IPFS content will always have accessability even if a site deletes your 
+			content.</p>
+		<h4>Other Information:</h4>
 		<p>For video content, we recommend 
 			<a href="https://handbrake.fr" target="_blank">HandBreak</a>. It's a free 
 			and open-source video transcoder that lets the user input their original 
@@ -178,8 +188,18 @@ if (!empty($_GET['pinHash'])) {
 	}
 
 	function pinShow() {
-		var bar = document.getElementById("pinText");
+		//var trx = document.getElementById("pinText");
+		//bar.style.display = "block";
+
+		var bar = document.getElementById("pinbar");
 		bar.style.display = "block";
+	}
+
+	function pinCheck() {
+		uri = window.location.pathname;
+		newUri = uri.slice(0, -11) + 
+			"execs/pin.php?pinHash=<?php echo $_GET['pinHash']; ?>";
+		window.location.pathname = newUri;
 	}
 </script>
 <?php include 'config/bottom.html'; ?>
