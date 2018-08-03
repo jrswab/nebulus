@@ -13,15 +13,7 @@ include_once '../config/uploadDBconfig.php';
 
 // Check if a table call 'username' exists
 if ($tableCheck = $link->query("SHOW TABLES LIKE '".htmlspecialchars($_SESSION['username'])."'")) {
-	if($tableCheck->num_rows == 1) {
-		if($playlistCheck = $link->query("SELECT playlist FROM '".htmlspecialchars($_SESSION['username'])."'")) {
-			echo '';
-		} else {
-			$addPlaylist = "ALTER TABLE ".$_SESSION['username']." ADD playlist TINYINT(1);";
-			$link->query($addPlaylist);
-		}
-  	echo " ";
-  } else {
+	if($tableCheck->num_rows < 1) {
 		$sql = "CREATE TABLE ".$_SESSION['username']." (
 		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		file_name VARCHAR(256) NOT NULL,
@@ -33,7 +25,14 @@ if ($tableCheck = $link->query("SHOW TABLES LIKE '".htmlspecialchars($_SESSION['
 		desc TEXT)";
 
 		$link->query($sql);
-	}
+	} else if($playlistCheck = $link->query("SELECT playlist FROM '".
+		htmlspecialchars($_SESSION['username'])."'")) {
+			echo "";
+		} else {
+			$addPlaylist = "ALTER TABLE ".$_SESSION['username']." ADD playlist TINYINT(1);";
+			$link->query($addPlaylist);
+		}
+  	echo " ";
 }
 
 if (isset($_POST['submit'])) {
