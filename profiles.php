@@ -3,7 +3,7 @@ include 'config/top.php';
 
 $timeIs = time();
 
-// uso URI to grab username since user may not be logged in.
+// use URI to grab username since user may not be logged in.
 $fullURI = "$_SERVER[REQUEST_URI]";
 $URIArray = explode('/', $fullURI);
 $endURL = end($URIArray);
@@ -31,8 +31,7 @@ if(!$feed){
 }
 ?>
 
-<h2></h2>
-</div><!-- this close tag relates to the topM.mephp file -->
+</div><!-- this close tag relates to the memberTop.php file -->
 
 <div class="d-flex flex-column align-items-center">
 	<div id="currentPhoto" style="padding:15px;">
@@ -40,7 +39,7 @@ if(!$feed){
 		class="rounded img-fluid" style="max-height:150px;"/>'; ?>
 	</div>
 
-	<h2><?php echo $user; ?></h2>
+	<h1><?php echo $user; ?></h1>
 	<p>
 		<?php
 			require 'config/config.php';
@@ -52,8 +51,13 @@ if(!$feed){
 		<br />
 	</p>
 
-	<h4>Playlist</h4>
-	<a href="https://archivatory.com/u/<?php echo $user; ?>/feed.php">RSS Feed</a>
+	<div style="text-align:center;">
+		<h2>Playlist 
+		<a href="https://archivatory.com/u/<?php echo $user; ?>/feed.php">
+			<img style="width:10%" src="<?php echo $dir; ?>img/rssLogo.png" />
+		</a></h2>
+	</div>
+
 	<?php
 		include 'config/uploadDBconfig.php';
 
@@ -69,8 +73,9 @@ if(!$feed){
 				// define playlist data
 				$hash = $row["hash"];
 				$id = $row["id"];
-				$title = htmlspecialchars($row["title"]);
-				$des = htmlspecialchars($row["des"]);
+				// already escaped on upload
+				$title = $row["title"];
+				$des = $row["des"];
 
 				// set up for content display
 				$fileExt = explode('.', $id);
@@ -82,34 +87,38 @@ if(!$feed){
 				// determine how to show the content
 				if (in_array($ext, $images)){
 					$display = '
-					<div style="width:100%">
-					<img src="'.$dir.'uploads/'.$id.'" style="width: 100%%" />
+					<div class="card-img-top" style="width:100%">
+						<img src="'.$dir.'uploads/'.$id.'" 
+						style="width:100%" />
 					</div>';
 				} else if (in_array($ext, $audios)){
 					$display = '
-					<div style="width:100%">
-					<audio controls style="width:100%">
-						<source src="'.$dir.'uploads/'.$id.'" type="audio/'.$ext.'">
-						Your browser does not support the audio tag.
-					</audio>
+					<div class="card-img-top" style="width:100%">
+						<audio controls style="width:100%">
+							<source src="'.$dir.'uploads/'.$id.'" type="audio/'.$ext.'">
+							Your browser does not support the audio tag.
+						</audio>
 					</div>';
 				} else if (in_array($ext, $videos)){
 					$display = '
-					<div style="width:100%">
-					<video controls style="width:100%">
-						<source src="'.$dir.'uploads/'.$id.'" type="video/'.$ext.'">
-						Your browser does not support the audio tag.
-					</video>
+					<div class="card-img-top" style="width:100%">
+						<video controls style="width:100%">
+							<source src="'.$dir.'uploads/'.$id.'" type="video/'.$ext.'">
+							Your browser does not support the audio tag.
+						</video>
 					</div>';
 				}
 
 				echo '
-				<div class="card border-dark mb-3" "style="min-width:99%">
-					<div class="card-header bg-secondary text-light"><h4>'.$title.'</h4></div>
+				<div class="card border-dark bg-light mb-3" style="min-width:100%">
+					'.$display.'
 					<div class="card-body text-dark">
-						<div class="d-flex justify-content-center">'.$display.'</div><br />
-						<p class="card-text"><strong>Description: </strong><br />'.$des.'
-						<br /><strong>IPFS Gateway: </strong><a href="https://ipfs.io/ipfs/'.$hash.'" target="_blank">'.$hash.'</a></p>
+						<h3 class="card-title">'.$title.'</h3>
+						<p class="card-text">
+							<h5>Description: </h5>'.$des.'
+							<br /><br /><h6>IPFS Gateway: </h6><a href="https://ipfs.io/ipfs/'
+							.$hash.'" target="_blank">'.$hash.'</a>
+						</p>
 					</div><!-- card body -->
 				</div><!-- card -->';
 			}

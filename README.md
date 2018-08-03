@@ -20,7 +20,7 @@ For a great guide check out [Digital Ocean](https://www.digitalocean.com/communi
   - `post_max_size` set to 0 for unlimited or choose a limit.
 	- `upload_max_size` set to the max allowed upload for your instance.
 	- `memory_limit` If running a server that only has an Archivatory instance do not set this higher that half of your total server RAM. This tells PHP how much RAM it is allowed to hog.
-	- `max_execution_time` Limits the execution time per scripte. Large files may need more run time.
+	- `max_execution_time` Limits the execution time per script. Large files may need more run time.
 	- For more information on these settings see [PHP: Handling file upload - Common Pitfalls](http://www.php.net/manual/en/features.file-upload.common-pitfalls.php).
 
 ### Create Databases and Tables:

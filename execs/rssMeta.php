@@ -4,7 +4,7 @@ session_start();
  
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-  header("location: login.php");
+  header("location: ../login.php");
   exit;
 }
 
@@ -13,7 +13,7 @@ $user = htmlspecialchars($_SESSION['username']);
 $title = htmlspecialchars($_POST['title']);
 $des = htmlspecialchars($_POST['des']);
 
-// Loging info for database contianing user tables.
+// Logging info for database containing user tables.
 include_once '../config/uploadDBconfig.php';
 
 // Check if a table call 'username' exists

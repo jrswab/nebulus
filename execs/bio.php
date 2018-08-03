@@ -13,7 +13,7 @@ if (isset($_POST['bioSubmit'])) {
 	if ($runBioUpload) {
 		header("Location: ../u/".$user);
 	} else {
-		echo "Could upload user bio. <br />";
+		echo "Could not upload user bio. <br />";
 		echo $link->error;
 		echo '<br /><br /> Please take a screen shot and send it to the 
 		#support thread on our <a href="https://discord.gg/PVNKWDx"> 

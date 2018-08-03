@@ -1,21 +1,21 @@
 <?php include 'config/top.php';
 
 $user = htmlspecialchars($_SESSION['username']);
-$proCheck = shell_exec('ls u/ | grep '.$user);
+$proCheck = shell_exec(escapeshellcmd('ls u/ | grep '.$user));
 
 if(!$proCheck) {
-	shell_exec('mkdir u/'.$user);
-	shell_exec('touch u/'.$user.'/index.php');
+	shell_exec(escapeshellcmd('mkdir u/'.$user));
+	shell_exec(escapeshellcmd('touch u/'.$user.'/index.php'));
 	$proPath = '"<?php require \'../../profiles.php\' ?>"';
-	shell_exec("echo ".$proPath." >> u/".$user."/index.php");
+	shell_exec(escapeshellcmd("echo ".$proPath." >> u/".$user."/index.php"));
 }
 	
 // if the feed.php file does not exist, create.
-$feedCheck = shell_exec('ls '.$dir.'u/'.$user.' | grep feed');
+$feedCheck = shell_exec(escapeshellcmd('ls '.$dir.'u/'.$user.' | grep feed'));
 if(!$feedCheck){
-	shell_exec('touch '.$dir.'u/'.$user.'/feed.php');
+	shell_exec(escapeshellcmd('touch '.$dir.'u/'.$user.'/feed.php'));
 	$feedPath = '"<?php require \'../../feeds.php\' ?>"';
-	shell_exec("echo ".$feedPath." >> u/".$user."/feed.php");
+	shell_exec(escapeshellcmd("echo ".$feedPath." >> u/".$user."/feed.php"));
 }
 ?>
 
@@ -25,7 +25,7 @@ if(!$feedCheck){
 			meet all the other Archivonauts!</h4>
 		</div>
 		<br>
-		<form id="upload-form" enctype="multipart/form-data" action="memUp.php" method="POST">
+		<form id="upload-form" enctype="multipart/form-data" action="execs/memUp.php" method="POST">
 			<div class="text-center">
 				<h2>Upload Your File</h2>
 				<p>Max allowed file size is 250MB.</p>
@@ -47,7 +47,7 @@ if(!$feedCheck){
 			<p class="alert alert-danger"><strong>Disclaimer:</strong> Due to the 
 			nature of IPFS your content may never be able to be removed entirely from 
 			the network. Even if we delete your file from our server, the hash will 
-			more than likely still proved the end user with a copy. Please keep this in 
+			more than likely still provide the end user with a copy. Please keep this in 
 			mind when uploading and never upload anything you do not want to be online 
 			forever.</p>
 			<p class="alert alert-warning">
@@ -61,15 +61,15 @@ if(!$feedCheck){
 			<ol>
 				<li>Click "Select File"</li>
 				<li>Click "Upload"</li>
-				<li>Wait. The larger the file the longer it will take to upload so be patient.</li>
+				<li>Wait. The larger the file, the longer it will take to upload so be patient.</li>
 			</ol>
 		</div>
 		
 		<p>For video content, we recommend 
-			<a href="https://handbrake.fr" target="_blank">HandBreak</a> it's a free 
+			<a href="https://handbrake.fr" target="_blank">HandBreak</a>. It's a free 
 			and open-source video transcoder that lets the user input their original 
 			video and output a web-optimized version. This optimized version will not 
-			only upload faster with our service but will also have better playback for 
+			only upload faster with our service, but will also have better playback for 
 			your viewers.</p>
 		
 		<p>Severs of this size are quite expensive; please consider donating STEEM 
@@ -85,7 +85,7 @@ if(!$feedCheck){
 
 		<p>If you have a Steem account and find this service helpful please 
 			<a href="https://steemconnect.com/sign/account-witness-vote?witness=jrswab&approve=1" target="_blank">
-				vote for @jrswab's witness server</a>. Every vote counts no matter how much 
+				vote for @jrswab's witness server</a>. Every vote counts, no matter how much 
 			Steem Power you hold.</p>
 
 		<p>Join us on <a href="https://discord.gg/dKDuaST" target="_blank">
