@@ -8,6 +8,12 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   exit;
 }
 
+// Finding where the root directory is for Archivatory.com
+$dir = "";
+while (!glob($dir.'execs/')) {
+	$dir .= '../';
+}
+
 // Loging info for database contianing user tables.
 include_once '../config/uploadDBconfig.php';
 
@@ -81,15 +87,15 @@ if (isset($_POST['submit'])) {
 				}
 			} else {
 				echo "Your file is too big. For best results please keep your file under 500MB.";
-				echo "<br><br><a href='welcome.php'>Return to upload</a>";
+				echo "<br><br><a href='".$dir."welcome.php'>Return to upload</a>";
 			}
 		} else {
 			echo "There was an error during uploading. Please try again.";
-			echo "<br><br><a href='welcome.php'>Return to upload.</a>";
+			echo "<br><br><a href='".$dir."welcome.php'>Return to upload.</a>";
 		}
 	} else {
 		echo "Sorry, the ".$fileActualExt." file type is not supported.";
-		echo "<br><br><a href='welcome.php'>Return to upload.</a>";
+		echo "<br><br><a href='".$dir."welcome.php'>Return to upload.</a>";
 	}
 }
 
