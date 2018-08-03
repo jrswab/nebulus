@@ -1,7 +1,4 @@
 import json
-import logging
-log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 from beem import Steem
 from beem.account import Account
@@ -16,13 +13,13 @@ steem = Steem(
     nobroadcast=False, # Set to false when want to go live
     keys=[wif],
 )
-# Set testnet as shared instance
+# Set steem() as shared instance
 set_shared_steem_instance(steem)
 
-# Account will use now testnet
+# Account to look up data
 account = Account("nebulus")
 
-# Loop through the past 1,000 transaction for the nebulus account.
+# Loop through the past 1,000 transaction for the account variable.
 for blocks in account.get_account_history(-1,1000):
     trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
     trxRaw = json.loads(trx)
