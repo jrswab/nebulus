@@ -26,9 +26,9 @@ if ($tableCheck = $link->query("SHOW TABLES LIKE '".htmlspecialchars($_SESSION['
 		hash VARCHAR(256) NOT NULL,
 		file_size VARCHAR(256) NOT NULL,
 		id VARCHAR(256) NOT NULL,
-		playlist TINYINT(1) NOT NULL
-		title VARCHAR(256)
-		desc TEXT)";
+		playlist TINYINT(1) NOT NULL,
+		title VARCHAR(256),
+		des TEXT)";
 
 		$link->query($sql);
 	} else if($playlistCheck = $link->query("SELECT playlist FROM '".
