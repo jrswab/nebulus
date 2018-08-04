@@ -8,32 +8,37 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   exit;
 }
 
+// Finding where the root directory is for Archivatory.com
+$dir = "";
+while (!glob($dir.'execs/')) {
+	$dir .= '../';
+}
+
 // Loging info for database contianing user tables.
 include_once '../config/uploadDBconfig.php';
 
 // Check if a table call 'username' exists
 if ($tableCheck = $link->query("SHOW TABLES LIKE '".htmlspecialchars($_SESSION['username'])."'")) {
-	if($tableCheck->num_rows == 1) {
-		if($playlistCheck = $link->query("SELECT playlist FROM '".htmlspecialchars($_SESSION['username'])."'")) {
-			echo '';
-		} else {
-			$addPlaylist = "ALTER TABLE ".$_SESSION['username']." ADD playlist TINYINT(1);";
-			$link->query($addPlaylist);
-		}
-  	echo " ";
-  } else {
+	if($tableCheck->num_rows < 1) {
 		$sql = "CREATE TABLE ".$_SESSION['username']." (
 		date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		file_name VARCHAR(256) NOT NULL,
 		hash VARCHAR(256) NOT NULL,
 		file_size VARCHAR(256) NOT NULL,
 		id VARCHAR(256) NOT NULL,
-		playlist TINYINT(1) NOT NULL
-		title VARCHAR(256)
-		desc TEXT)";
+		playlist TINYINT(1) NOT NULL,
+		title VARCHAR(256),
+		des TEXT)";
 
 		$link->query($sql);
-	}
+	} else if($playlistCheck = $link->query("SELECT playlist FROM '".
+		htmlspecialchars($_SESSION['username'])."'")) {
+			echo "";
+		} else {
+			$addPlaylist = "ALTER TABLE ".$_SESSION['username']." ADD playlist TINYINT(1);";
+			$link->query($addPlaylist);
+		}
+  	echo " ";
 }
 
 if (isset($_POST['submit'])) {
@@ -82,15 +87,15 @@ if (isset($_POST['submit'])) {
 				}
 			} else {
 				echo "Your file is too big. For best results please keep your file under 500MB.";
-				echo "<br><br><a href='welcome.php'>Return to upload</a>";
+				echo "<br><br><a href='".$dir."welcome.php'>Return to upload</a>";
 			}
 		} else {
 			echo "There was an error during uploading. Please try again.";
-			echo "<br><br><a href='welcome.php'>Return to upload.</a>";
+			echo "<br><br><a href='".$dir."welcome.php'>Return to upload.</a>";
 		}
 	} else {
 		echo "Sorry, the ".$fileActualExt." file type is not supported.";
-		echo "<br><br><a href='welcome.php'>Return to upload.</a>";
+		echo "<br><br><a href='".$dir."welcome.php'>Return to upload.</a>";
 	}
 }
 
