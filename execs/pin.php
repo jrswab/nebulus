@@ -1,24 +1,19 @@
 <?php
-if (!empty($_GET['pinHash'])) {
-	$pinData = shell_exec(escapeshellcmd("python steemPinCheck.py"));
-	$shellOut = explode("'", $pinData);
-	$blocks = sizeof($shellOut) - 1;
-	$justHash = array();
 
-	for($i = 0; $i < $blocks; $i++){
-		$temp = explode(" ", $shellOut[$i]);
-		array_push($justHash, $temp[1]);
+if (!empty($_GET['pinHash'])) {
+	$pinHash = htmlspecialchars($_GET['pinHash']);
+	$pinDataCmd = escapeshellcmd("python steemPinCheck.py ".$pinHash);
+	$pinData = shell_exec($pinDataCmd);
+	$server = $_SERVER['HTTP_HOST'];
+
+	$pinCheck = shell_exec("ipfs pin ls | grep ".$pinHash." 2>&1");
+
+	if ($pinCheck) {
+		header("Location: ../welcome.php");
+	} else {
+		$run = shell_exec("ipfs pin add ".$pinHash." > /dev/null 2>&1 &");
+		header("Location: ../welcome.php");
 	}
-}
-	//echo var_dump($justHash)."<br /><br />";
-function checkHash() {
-	foreach ($justHash as $value) {
-		if ($_GET['pinHash'] == $value) {
-			$found = shell_exec("ipfs refs local | grep ".escapeshellcmd($value)." 2>&1");
-			if(!$found){
-				echo htmlspecialchars($value)." is not found on the server, now pinning. <br />";
-				//echo shell_exec("ipfs pin add ".escapeshellcmd($value)." 2>&1");
-			}
-		}
-	}
+} else {
+		header("Location: ../welcome.php");
 }

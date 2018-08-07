@@ -11,7 +11,9 @@ steem = Steem(
 )
 
 # Set varialbe to steemconnect instance
-sc2 = SteemConnect(steem_instance=steem)
+sc2 = SteemConnect(client_id="archivatory")
+#steem = Steem(steemconnect=sc2)
+#steem.wallet.unlock(secret)
 
 # Get arguments
 user = sys.argv[1]
