@@ -24,8 +24,8 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href="<?php echo $dir; ?>index.php">
 		<img src="<?php echo $dir; ?>img/favicons/android-chrome-512x512.png" width="30" height="30" 
-			class="d-line-block align-top" alt="Archivatory-Archie">
-			Archivatory
+			class="d-line-block align-top" alt="Nebulus-Archie">
+			Nebulus
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" 
 			data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 

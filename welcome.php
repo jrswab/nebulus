@@ -1,5 +1,10 @@
 <?php include 'config/top.php';
 
+if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+	header("location: ".$dir."login.php");
+	exit;
+}
+
 $user = htmlspecialchars($_SESSION['username']);
 $proCheck = shell_exec(escapeshellcmd('ls u/ | grep '.$user));
 
@@ -17,25 +22,95 @@ if(!$feedCheck){
 	$feedPath = '"<?php require \'../../feeds.php\' ?>"';
 	shell_exec(escapeshellcmd("echo ".$feedPath." >> u/".$user."/feed.php"));
 }
+
+if (!empty($_GET['steemName'])) {
+	$steemName = htmlspecialchars($_GET['steemName']);
+}
+
+if (!empty($_GET['pinHash'])) {
+	$pinHash = htmlspecialchars($_GET['pinHash']);
+}
 ?>
 
-			<h2>Welcome to Archivatory.</h2>
+			<h2>Welcome to Nebulus.</h2>
 			<h4>More features are coming soon so make sure to join us on 
 			<a href="https://discord.gg/dKDuaST" target="_blank">Discord</a> and 
 			meet all the other Archivonauts!</h4>
 		</div>
 		<br>
-		<form id="upload-form" enctype="multipart/form-data" action="execs/memUp.php" method="POST">
+
+	<div class="card border-dark mb-3">
+		<div class="card-header">
+			<h3>Upload Content:</h3>
+		</div>
+		<div class="card-body">
+			<form id="upload-form" enctype="multipart/form-data" 
+				action="execs/memUp.php" method="POST">
+				<div class="text-center">
+					<p>Max allowed file size is 250MB.</p>
+					<input class="form-input" type="file" name="file" />
+					<br><br>
+					<div id="bar" style="display:none">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped progress-bar-animated" 
+							role="progressbar" aria-valuenow="100" aria-valuemin="0" 
+							aria-valuemax="100" style="width: 100%"></div>
+						</div>
+						<br>
+					</div>
+				</div>
+				<button id="click" onclick="pgShow()" 
+				class="btn btn-success btn-lg btn-block" name="submit" type="submit">
+				Upload</button><br>
+			</form>
+		</div>
+	</div>
+
+	<div id="pin-card" class="card border-dark mb-3">
+		<div class="card-header">
+				<h3>Pin Content:</h3>
+		</div>
+		<div class="card-body">
+		<form id="pin-form" action="#pin-form" method="GET">
 			<div class="text-center">
-				<h2>Upload Your File</h2>
-				<p>Max allowed file size is 250MB.</p>
-				<input class="form-input" type="file" name="file" />
+				<h4>Steem Account<br />(without "@"):</h4>
+				<input style="width:40%;text-align:center" class="pin-card" type="text" name="steemName" 
+					placeholder="eg: jrswab" />
+				<br /><br />
+				<h4>Hash To Pin:</h4>
+				<input style="width:80%;text-align:center" class="form-input" type="text" name="pinHash" 
+					placeholder="eg: QmTFLiKypBp6RxA6L1XGDhtmMXK5DYpBnVxNcG4yp1HWVT" />
 			</div>
-			<br><br>
-			<button id="click" onclick="pgShow()" 
-			class="btn btn-success btn-lg btn-block" name="submit" type="submit">
-			Upload</button><br>
-			<div id="bar" style="display:none">
+			<br>
+			
+			<button id="pinClick" class="btn btn-secondary btn-lg 
+				btn-block" name="pinSubmit" type="submit">Grab SteemConnet Link</button>
+
+				<?php 
+					// Build SteemConnect Link
+					$pinHash = $_GET['pinHash'];
+					$steemName = $_GET['steemName'];
+					$domain = $_SERVER['HTTP_HOST'];
+
+					// make sure name and hash are in url
+					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
+						echo '<br /><br />
+							<div class="text-center">
+								<h4><a onclick="pin()" 
+								href="https://steemconnect.com/sign/transfer?to=nebulus&amount=1.000+STEEM&from='
+								.$steemName.'&memo=pin+'.$pinHash.
+								'&redirect_uri=https://'.$domain.'/execs/pin.php?pinHash='.$pinHash.'">
+								Click here to send pin transaction with SteemConnect!</a></h4>
+							</div>';
+						$uriStr = "?steemName".$_GET['steemName']."&pinHash".$_GET['pinHash'].
+							"&pinSubmit=#pin-form";
+						$uriLen = strlen($uriStr);
+					} else {
+						echo '';
+					}
+				?>
+
+			<div id="pinBar" style="display:none">
 				<div class="progress">
 					<div class="progress-bar progress-bar-striped progress-bar-animated" 
 					role="progressbar" aria-valuenow="100" aria-valuemin="0" 
@@ -43,6 +118,11 @@ if(!$feedCheck){
 				</div>
 				<br>
 			</div>
+
+			<br />
+		</form>
+		</div>
+	</div>
 
 			<p class="alert alert-danger"><strong>Disclaimer:</strong> Due to the 
 			nature of IPFS your content may never be able to be removed entirely from 
@@ -52,9 +132,8 @@ if(!$feedCheck){
 			forever.</p>
 			<p class="alert alert-warning">
 				<strong>This is still a beta service!</strong> Please do not use this as 
-				a backup service. We are still in the early stages of Archivatory and 
+				a backup service. We are still in the early stages of Nebulus and 
 				don't want you to lose your data. Always save a copy on an external hard drive and a separate cloud service for redundancy.</p>
-		</form>
 		
 		<h3>How To Use:</h3>
 		<div>
@@ -65,6 +144,23 @@ if(!$feedCheck){
 			</ol>
 		</div>
 		
+		<h4>About Pinning</h4>
+		<p>Since pinned content does not use Nebulus as it's primary storage 
+			location a STEEM transaction is needed to help support the cost of the 
+			server. If you want to use our service free of charge, please upload your 
+			content here and then use the hash on the site of your choice.</p>
+		<p>It does seem that sites transcode your content for better storage 
+			utilization causing the IPFS hash to be different than what you get on our 
+			website. Uploading both here and a place like Dtube increases the chance 
+			that you will have two different hashes and thus will not keep your content 
+			from disappearing if the app loses your media.</p>
+
+		<p>Already have your content hosted on a site like Dtube and would like to 
+			make sure it sticks around? Our service is the best option for you! Since 
+			we are federated with nodes around the world you can be sure that at your 
+			IPFS content will always have accessability even if a site deletes your 
+			content.</p>
+		<h4>Other Information:</h4>
 		<p>For video content, we recommend 
 			<a href="https://handbrake.fr" target="_blank">HandBreak</a>. It's a free 
 			and open-source video transcoder that lets the user input their original 
@@ -90,10 +186,24 @@ if(!$feedCheck){
 
 		<p>Join us on <a href="https://discord.gg/dKDuaST" target="_blank">
 			Discord</a>!</p>
-<script>
-	function pgShow() {
-		var bar = document.getElementById("bar");
-		bar.style.display = "block";
-	}
-</script>
+
+	<script>
+		function pgShow() {
+			var bar = document.getElementById("bar");
+			bar.style.display = "block";
+		}
+
+		function pin() {
+			uri = window.location.pathname;
+			console.log(uri);
+			newUri = uri.slice(0, -11) + "execs/pin.php"; 
+			window.location.pathname = newUri;
+		}
+	</script>
+	<script>
+		$("#sc2").click(function() {
+			$("#pinBar").show();
+		});
+	</script>
+
 <?php include 'config/bottom.html'; ?>

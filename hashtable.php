@@ -36,7 +36,7 @@ $sql = "SELECT * FROM ".$user." ORDER BY date DESC;";
 $result = mysqli_query($link, $sql);
 $resultCheck = mysqli_num_rows($result);
 ?>
-<h3>Your personal Archivatory Database! </h3>
+<h3>Your personal Nebulus Database! </h3>
 </div>
 <div class="d-flex flex-column align-items-center">
 	<?php

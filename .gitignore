@@ -4,5 +4,5 @@ extra/*
 backups/*
 config/uploadDBconfig.php
 config/config.php
+config/wifRaw
 startipfs.php
-wifRaw

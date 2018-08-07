@@ -94,9 +94,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 ?>
 <?php include 'config/top.php'; ?> 
 			<br>
-			<h1>Sign Up For Archivatory!</h1>
+			<h1>Sign Up For Nebulus!</h1>
 			<h3>Privacy is vital in today's digital age.</h3>
-			<p>Here at Archivatory, we don't ask for your name, email, gender, or 
+			<p>Here at Nebulus, we don't ask for your name, email, gender, or 
 			anything else that can identify you at a deep level. This being the case, 
 			<b>we are unable to recover lost passwords</b> so please use a password 
 			manager like <a href="https://bitwarden.com/" target="_blank">Bitwarden</a> 
@@ -120,7 +120,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 					</div>
 					<div>
 						<input type="checkbox" name="accept" value="accept" required> I 
-							understand that Archivatory or any staff member thereof is unable to 
+							understand that Nebulus or any staff member thereof is unable to 
 							recover my password and therefore my account.
 						<br><br>
 					</div>

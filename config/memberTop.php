@@ -13,7 +13,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Archivatory</title>
+	<title>Nebulus</title>
 	<link rel="stylesheet" 
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" 
@@ -36,8 +36,8 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 <a class="navbar-brand" href="<?php echo $dir; ?>welcome.php">
 
 	<?php echo '<img src="'.$dir.'img/favicons/android-chrome-512x512.png" width="30" height="30"                                        
-	class="d-line-block align-top" alt="Archivatory-Archie">' ?>
-	Archivatory
+	class="d-line-block align-top" alt="Nebulus-Archie">' ?>
+	Nebulus
 </a>                                                                                                    
 <button class="navbar-toggler" type="button" data-toggle="collapse"                                     
 	data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"                              

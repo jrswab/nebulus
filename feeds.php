@@ -27,12 +27,12 @@ while (!glob($dir.'hash.php')) {
 
 	// unchanging rss info
 	$rssfeed .= '
-			<title>'.$user.'\'s Archivatory Feed</title>
+			<title>'.$user.'\'s Nebulus Feed</title>
 			<link>'.$dir.'u/'.$user.'</link>
-			<description>This is the Archivatory RSS feed for '.$user.'</description>
+			<description>This is the Nebulus RSS feed for '.$user.'</description>
 			<image>
 				<url>'.$dir.'uploads/profiles/'.$proPho.'</url>
-				<title>'.$user.'\'s Archivatory Feed</title>
+				<title>'.$user.'\'s Nebulus Feed</title>
 				<link>https://archivatory.com/u/'.$user.'</link>
 			</image>
 			<language>en-us</language>
