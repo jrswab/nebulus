@@ -66,15 +66,15 @@ if (!empty($_GET['pinHash'])) {
 		</div>
 	</div>
 
-	<div class="card border-dark mb-3">
+	<div id="pin-card" class="card border-dark mb-3">
 		<div class="card-header">
 				<h3>Pin Content:</h3>
 		</div>
 		<div class="card-body">
-		<form id="pin-form" action="#pinClick" method="GET">
+		<form id="pin-form" action="#pin-form" method="GET">
 			<div class="text-center">
 				<h4>Steem Account<br />(without "@"):</h4>
-				<input style="width:40%;text-align:center" class="form-input" type="text" name="steemName" 
+				<input style="width:40%;text-align:center" class="pin-card" type="text" name="steemName" 
 					placeholder="eg: jrswab" />
 				<br /><br />
 				<h4>Hash To Pin:</h4>
@@ -82,7 +82,35 @@ if (!empty($_GET['pinHash'])) {
 					placeholder="eg: QmTFLiKypBp6RxA6L1XGDhtmMXK5DYpBnVxNcG4yp1HWVT" />
 			</div>
 			<br>
-			<div id="pinbar" style="display:none">
+			
+			<button id="pinClick" class="btn btn-secondary btn-lg 
+				btn-block" name="pinSubmit" type="submit">Grab SteemConnet Link</button>
+
+				<?php 
+					// Build SteemConnect Link
+					$pinHash = $_GET['pinHash'];
+					$steemName = $_GET['steemName'];
+					$domain = $_SERVER['HTTP_HOST'];
+
+					// make sure name and hash are in url
+					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
+						echo '<br /><br />
+							<div class="text-center">
+								<h4><a onclick="pin()" 
+								href="https://steemconnect.com/sign/transfer?to=nebulus&amount=1.000+STEEM&from='
+								.$steemName.'&memo=pin+'.$pinHash.
+								'&redirect_uri=https://'.$domain.'/execs/pin.php?pinHash='.$pinHash.'">
+								Click here to send pin transaction with SteemConnect!</a></h4>
+							</div>';
+						$uriStr = "?steemName".$_GET['steemName']."&pinHash".$_GET['pinHash'].
+							"&pinSubmit=#pin-form";
+						$uriLen = strlen($uriStr);
+					} else {
+						echo '';
+					}
+				?>
+
+			<div id="pinBar" style="display:none">
 				<div class="progress">
 					<div class="progress-bar progress-bar-striped progress-bar-animated" 
 					role="progressbar" aria-valuenow="100" aria-valuemin="0" 
@@ -90,30 +118,7 @@ if (!empty($_GET['pinHash'])) {
 				</div>
 				<br>
 			</div>
-			
-			<button id="pinClick" onclick="pinShow()" class="btn btn-secondary btn-lg 
-				btn-block" name="pinSubmit" type="submit">Grab Pin Data</button>
-				<?php 
-					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
-						$sc2cmd = escapeshellcmd('python execs/scPin.py '.$steemName
-							.' "pin '.$pinHash.'"');
-						$sc2Link = shell_exec($sc2cmd);
-						echo '<br /><br />
-							<div class="text-center">
-								<h5>Copy the line below and send a 1 STEEM transfer to @nebulus with the 
-								line below as the memo:</h5>
-								<div class="d-inline-flex card border-dark">
-									<div style="padding:10px">
-										pin '.$pinHash.'
-									</div>
-								</div>
-									<h5><br />or <a onclick="pinCheck()" 
-									href="'.$sc2Link.'" target="_blank">use SteemConnect!</a></h5>
-							</div>';
-					} else {
-						echo '';
-					}
-				?>
+
 			<br />
 		</form>
 		</div>
@@ -181,25 +186,24 @@ if (!empty($_GET['pinHash'])) {
 
 		<p>Join us on <a href="https://discord.gg/dKDuaST" target="_blank">
 			Discord</a>!</p>
-<script>
-	function pgShow() {
-		var bar = document.getElementById("bar");
-		bar.style.display = "block";
-	}
 
-	function pinShow() {
-		//var trx = document.getElementById("pinText");
-		//bar.style.display = "block";
+	<script>
+		function pgShow() {
+			var bar = document.getElementById("bar");
+			bar.style.display = "block";
+		}
 
-		var bar = document.getElementById("pinbar");
-		bar.style.display = "block";
-	}
+		function pin() {
+			uri = window.location.pathname;
+			console.log(uri);
+			newUri = uri.slice(0, -11) + "execs/pin.php"; 
+			window.location.pathname = newUri;
+		}
+	</script>
+	<script>
+		$("#sc2").click(function() {
+			$("#pinBar").show();
+		});
+	</script>
 
-	function pinCheck() {
-		uri = window.location.pathname;
-		newUri = uri.slice(0, -11) + 
-			"execs/pin.php?pinHash=<?php echo $_GET['pinHash']; ?>";
-		window.location.pathname = newUri;
-	}
-</script>
 <?php include 'config/bottom.html'; ?>
