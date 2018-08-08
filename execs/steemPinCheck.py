@@ -1,7 +1,6 @@
 import json
 import sys
-
-from subprocess import call
+import os
 
 # Steem Access
 from beem import Steem
@@ -39,7 +38,7 @@ for blocks in account.get_account_history(-1,50):
 
     if pinHash in trx:
         if trxRaw["amount"] == "1.000 STEEM":
-            print("ready")
-            break
+           print("ready")
+           break
         else:
             print("Wrong STEEM amount")
