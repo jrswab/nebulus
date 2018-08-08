@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
 				$fileDestination = '../uploads/'.$fileNameNew; // define file upload end location
 				move_uploaded_file($fileTmpName, $fileDestination); // move the file
 				// Appache runs IPFS upload command
-				$output = shell_exec("ipfs add ".$fileDestination." 2>&1");
+				$output = shell_exec("ipfs add ".$fileDestination);
 				$dicedOut = explode(' ', $output); // create an array of the IPFS STDOUT dilimited on spaces
 				end($dicedOut); // Move pointer to the end of the array
 				$hash = prev($dicedOut); // display the second to last item in the array
