@@ -26,7 +26,7 @@ set_shared_steem_instance(steem)
 account = Account("nebulus")
 
 # set the arugment to pinHash
-pinHash = sys.argv[1]
+#pinHash = sys.argv[1]
 
 # Loop through the past 50 transaction for the account variable.
 # Keeping it to 50 allows for a faster load time
@@ -38,9 +38,7 @@ for blocks in account.get_account_history(-1,50):
     # allows us to call data by the json key
     trxRaw = json.loads(trx)
 
-    if pinHash in trx:
-        if trxRaw["amount"] == "1.000 STEEM":
-           print("ready")
-           break
-        else:
-            print("Wrong STEEM amount")
+    if 'pin' in trx:
+	memo = trxRaw["memo"]
+	chain = memo.split()
+	print(chain[1])
