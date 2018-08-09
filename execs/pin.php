@@ -1,13 +1,12 @@
 <?php
-
 if (!empty($_GET['pinHash'])) {
 	$pinHash = $_GET['pinHash'];
 	$hashArg = escapeshellarg($pinHash);
-	$pinDataCmd = "python steemPinCheck.py ".$hashArg;
-	$pinData = shell_exec($pinDataCmd);
+	$pinDataCmd = escapeshellcmd("python steemPinCheck.py ".$hashArg);
+	$pinData = system($pinDataCmd);
 	$ready = rtrim($pinData);
-/*
-	echo $pinHash;
+
+	echo var_dump($pinData);
 	echo "<br />";
 	echo $hashArg;
 	echo "<br />";
@@ -17,31 +16,27 @@ if (!empty($_GET['pinHash'])) {
 	echo "<br />";
 	echo $ready;
 	echo "<br />";
- */
+
 	if ($ready == "ready") {
 		$checkList = shell_exec("ipfs pin ls | grep ".$hashArg." 2>&1");
 		$checkExp = explode(' ', $checkList);
 		$pinCheck = $checkExp[0];
 
 		if ($pinCheck == $pinHash) {
-			//echo "found";
-			header("Location: ../welcome.php");
+			echo "found";
+			//header("Location: ../welcome.php");
 		} else {
-			$pinExe = "python pyPin.py $hashArg";
-			/*
-			echo $pinExe;
 			echo "<br />";
 			echo "running";
 			echo "<br />";
-			 */
-			exec($pinExe);
-			header("Location: ../welcome.php");
+			//header("Location: ../welcome.php");
 		}
 	} else {
-		//echo "not ready";
-		header("Location: ../welcome.php");
+		echo "not ready";
+		//header("Location: ../welcome.php");
 	}
 	
 } else {
 		header("Location: ../welcome.php");
 }
+?>

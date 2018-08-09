@@ -53,7 +53,7 @@ if(!$feed){
 
 	<div style="text-align:center;">
 		<h2>Playlist 
-		<a href="https://archivatory.com/u/<?php echo $user; ?>/feed.php">
+		<a href="https://nebulus.app/u/<?php echo $user; ?>/feed.php">
 			<img style="width:10%" src="<?php echo $dir; ?>img/rssLogo.png" />
 		</a></h2>
 	</div>
