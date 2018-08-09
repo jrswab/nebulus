@@ -3,6 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome</title>
+	<meta name="description" content="Nebulus: Create, Upload, Decentralize. Nebulus is a web app that gives the content creator IPFS hosting that is intutive and reliable." />
+	<meta property="og:title" content="Nebulus" />
+	<meta property="og:description" content="Nebulus is a web app that gives the content creator a place to host their content via the IPFS network." />
+	<meta property="og:image" content="<?php echo $dir; ?>img/NebulusRichDescript.png" />
 	<link rel="stylesheet" 
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" 
