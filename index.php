@@ -1,6 +1,6 @@
 <?php include 'config/top.php'; ?> 
-	<h2>Welcome to Archivatory.</h2>
-	<p>Archivatory is a PHP project that gives the content creator a place to host 
+	<h2>Welcome to Nebulus.</h2>
+	<p>Nebulus is a PHP project that gives the content creator a place to host 
 		their content for the Interplanetary File System (IPFS) network. The more 
 		places their content exists, the better the chance that the work will be 
 		available via an IPFS gateway whenever the viewer wishes to consume the 
@@ -10,8 +10,8 @@
 		After chatting with a few Steemians (cryptocurrency earing content creators), 
 		it was clear that the developer was not the only one looking for a more 
 		natural way to use IPFS. We are still a very new project with lots of 
-		milestones we what to reach to provide as much value for "Archivanauts" all 
-		around the galaxy. A long-term milestone for Archivatory is to turn it into 
+		milestones we what to reach to provide as much value for "Nebunauts" all 
+		around the galaxy. A long-term milestone for Nebulus is to turn it into 
 		a federated service because what's the point if everything hinges on a single 
 		server.</p>
 	<strong>More features are coming soon so make sure to join us on 
@@ -28,7 +28,7 @@ in mind when uploading and never upload anything you do not want to be online
 forever.</p>
 	<p class="alert alert-warning"><strong>This is still a beta service!</strong> 
 Please do not use this as a backup service. We are still in the early stages 
-of Archivatory and don't want you to lose your data. Always save a copy on 
+of Nebulus and don't want you to lose your data. Always save a copy on 
 an external hard drive and a separate cloud service for redundancy.</p>
 </form>
 

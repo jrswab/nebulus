@@ -1,19 +1,17 @@
-<?php
-$dir = '';
-while (!glob($dir.'hash.php')) {
-	$dir .= '../';
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome</title>
+	<meta name="description" content="Nebulus: Create, Upload, Decentralize. Nebulus is a web app that gives the content creator IPFS hosting that is intutive and reliable." />
+	<meta property="og:title" content="Nebulus" />
+	<meta property="og:description" content="Nebulus is a web app that gives the content creator a place to host their content via the IPFS network." />
+	<meta property="og:image" content="<?php echo $dir; ?>img/NebulusRichDescript.png" />
 	<link rel="stylesheet" 
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" 
 	crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Archivonaut Favicons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
@@ -27,11 +25,11 @@ while (!glob($dir.'hash.php')) {
 	<!-- end favicons -->
 </head> 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href="<?php echo $dir; ?>index.php">
-		<img src="<?php echo $dir; ?>img/archieTheArchivonaut.png" width="30" height="30" 
-			class="d-line-block align-top" alt="Archivatory-Archie">
-			Archivatory
+		<img src="<?php echo $dir; ?>img/favicons/android-chrome-512x512.png" width="30" height="30" 
+			class="d-line-block align-top" alt="Nebulus-Archie">
+			Nebulus
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" 
 			data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 

@@ -16,18 +16,18 @@ if($playlistCheck = $link->query("SELECT playlist FROM '".$user."'")) {
 if (!empty($_GET['delete'])) {
 	$sqlDelete = "DELETE FROM ".$user." WHERE id='".$_GET["delete"]."'";
 	$delRun = mysqli_query($link, $sqlDelete);
-	$rm = shell_exec("rm uploads/".$_GET['delete']);
+	$rm = shell_exec(escapeshellcmd("rm uploads/".$_GET['delete']));
 }
 
 // Check for add to playlist
 if (!empty($_GET['addPlay'])) {
-	$sqlAddPlay = "UPDATE ".$user." SET playlist=1 WHERE id='".$_GET['addPlay']."'";
+	$sqlAddPlay = "UPDATE ".$user." SET playlist = 1, date = date  WHERE id='".$_GET['addPlay']."'";
 	$runAddPlay = mysqli_query($link, $sqlAddPlay);
 } 
 
 // Check for removal from playlist
 if (!empty($_GET['delPlay'])) {
-	$sqlDelPlay = "UPDATE ".$user." SET playlist=0 WHERE id='".$_GET['delPlay']."'";
+	$sqlDelPlay = "UPDATE ".$user." SET playlist = 0, date = date WHERE id='".$_GET['delPlay']."'";
 	$runDelPlay = mysqli_query($link, $sqlDelPlay);
 }
 
@@ -36,7 +36,7 @@ $sql = "SELECT * FROM ".$user." ORDER BY date DESC;";
 $result = mysqli_query($link, $sql);
 $resultCheck = mysqli_num_rows($result);
 ?>
-<h3>Your personal Archivatory Database! </h3>
+<h3>Your personal Nebulus Database! </h3>
 </div>
 <div class="d-flex flex-column align-items-center">
 	<?php
@@ -48,8 +48,9 @@ $resultCheck = mysqli_num_rows($result);
 				$hash = $row["hash"];
 				$fileSize = round(($row["file_size"]/1000000), 2);
 				$id = $row["id"];
-				$title = htmlspecialchars($row["title"]);
-				$des = htmlspecialchars($row["des"]);
+				// already escaped on upload to server
+				$title = $row["title"];
+				$des = $row["des"];
 
 				// if user playlist column for the content is '0'
 				// show the add button else show the remove button.
@@ -77,51 +78,61 @@ $resultCheck = mysqli_num_rows($result);
 				$fileExt = explode('.', $id);
 				$ext = strtolower(end($fileExt));
 				$images = array('jpg', 'jpeg', 'png');
-				$audios = array('mp3', 'ogg');
+				$audios = array('mp3', 'wav');
 				$videos = array('mp4', 'm4v', 'webm');
 				
 				// determine how to show the content
 				if (in_array($ext, $images)){
-					$display = '<img src="uploads/'.$id.'" style="width:100%" />'; 
+					$display = '
+					<div class="card-img-top"  style="width:100%">
+						<img  src="uploads/'.$id.'" style="width:100%" />
+					</div>';
 				} else if (in_array($ext, $audios)){
 					$display = '
+					<div class="card-img-top"  style="width:100%">
 						<audio controls style="width:100%">
 							<source src="uploads/'.$id.'" type="audio/'.$ext.'">
 							Your browser does not support the audio tag.
-						</audio>';
+						</audio>
+					</div>';
 				} else if (in_array($ext, $videos)){
 					$display = '
+					<div class="card-img-top"  style="width:100%">
 						<video style="width:100%" controls>
 							<source src="uploads/'.$id.'" type="video/'.$ext.'">
 							Your browser does not support the video tag.
-						</video>';
+						</video>
+					</div>';
+				} else {
+					$display = '<h5 style="text-align:center;padding:15px;">The '.$ext.
+						' media format is not currently supported.</h5>';
 				}
 
 				// echo out content cards for users to see the uploaded file, add a title,
 				// add a description, grad the link, add to their playlist,
 				// and delete the content from the server.
 				echo '
-				<div class="card border-dark mb-3" style="min-width:99%" >
-					<div class="card-header bg-secondary text-light"><h4>'.$fileName.'</h4></div>
+				<div class="card mb-3" style="min-width:100%" >
+					'.$display.'
 					<div class="card-body text-dark">
-						<div class="d-flex justify-content-center">'.$display.'</div>
-						<br />
-						<form enctype="multipart/form-data" action="execs/rssMeta.php" method="POST">
-							<span style="font-weight: bold">Title:</span>
-							<input name="title" type="text" class="form-control" placeholder="'.$title.'"><br />
-							<span style="font-weight: bold">Description:</span>
-							<textarea name="des" class="form-control" rows="3" placeholder="'.$des.'"></textarea><br />
-							<input type="hidden" name="rowID" value="'.$id.'">
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</form><br />
-
+						<h3 class="card-title">'.$fileName.'</h3>
 						<p class="card-text">
+							<form enctype="multipart/form-data" action="execs/rssMeta.php" method="POST">
+								<span style="font-weight: bold">Title:</span>
+								<input name="title" type="text" class="form-control" placeholder="'
+									.$title.'"><br />
+								<span style="font-weight: bold">Description:</span>
+								<textarea name="des" class="form-control" rows="3" placeholder="'
+									.$des.'"></textarea><br />
+								<input type="hidden" name="rowID" value="'.$id.'">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form><br />
+
 							<strong>File Type: </strong>'.$ext.'<br />
 							<strong>IPFS Link: </strong>
 							<a href="https://ipfs.io/ipfs/'.$hash.'" target="_blank">'.$hash.'</a><br />
 							<strong>Size: </strong>'.$fileSize.' MB
 						</p>
-						<p class="card-text"></p>
 
 						<div class="row">
 							<div class="col d-flex justify-content-start">

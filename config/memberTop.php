@@ -2,12 +2,6 @@
 // Initialize the session
 session_start();
 
-// Finding where the root directory is for Archivatory.com
-$dir = "";
-while (!glob($dir.'hash.php')) {
-	$dir .= '../';
-}
-
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 	header("location: ".$dir."login.php");
@@ -19,11 +13,12 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Archivatory</title>
+	<title>Nebulus</title>
 	<link rel="stylesheet" 
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
 	integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" 
 	crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Archivonaut Favicons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
@@ -37,12 +32,12 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 	<!-- end favicons -->
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">                                               
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">                                               
 <a class="navbar-brand" href="<?php echo $dir; ?>welcome.php">
 
-	<?php echo '<img src="'.$dir.'img/archieTheArchivonaut.png" width="30" height="30"                                        
-	class="d-line-block align-top" alt="Archivatory-Archie">' ?>
-	Archivatory
+	<?php echo '<img src="'.$dir.'img/favicons/android-chrome-512x512.png" width="30" height="30"                                        
+	class="d-line-block align-top" alt="Nebulus-Archie">' ?>
+	Nebulus
 </a>                                                                                                    
 <button class="navbar-toggler" type="button" data-toggle="collapse"                                     
 	data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"                              
@@ -58,17 +53,21 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 			<a class="nav-link" href="<?php echo $dir; ?>hashtable.php">Media</a>
 		</li>
 		<li>
-			<a class="nav-link" href="<?php echo $dir; ?>u/<?php echo htmlspecialchars($_SESSION['username']); ?>">Profile</a>
+			<a class="nav-link" href="<?php echo $dir; ?>u/
+			<?php echo htmlspecialchars($_SESSION['username']); ?>">Profile</a>
+		</li>
+		<li class="nav-item">
+		<a class="nav-link" href="<?php echo $dir; ?>settings.php">
+			Settings</a>
+		</li>
+		<li class="nav-item">
+		<a class="nav-link text-danger" href="<?php echo $dir; ?>logout.php">
+			<strong>Logout</strong></a>
 		</li>
 	</ul>
-	<form class="form-inline my-2 my-lg-0">
-		<a href="<?php echo $dir; ?>settings.php" class="btn btn-outline-info"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
-		&nbsp;&nbsp;
-		<a href="<?php echo $dir; ?>logout.php" class="btn btn-outline-danger">Sign Out</a>
-		</form>
-	</div>
+</div>
 </nav>
 
 	<div id="content" class="container">
-		<div style="text-align:center;width:100%;">
+		<div style="text-align:center;">
 			<br>
