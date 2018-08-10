@@ -88,9 +88,9 @@ if (!empty($_GET['pinHash'])) {
 
 				<?php 
 					// Build SteemConnect Link
-					$pinHash = $_GET['pinHash'];
-					$steemName = $_GET['steemName'];
-					$domain = $_SERVER['HTTP_HOST'];
+					$pinHash = htmlspecialchars($_GET['pinHash']);
+					$steemName = htmlspecialchars($_GET['steemName']);
+					$domain = htmlspecialchars($_SERVER['HTTP_HOST']);
 
 					// make sure name and hash are in url
 					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
@@ -102,23 +102,14 @@ if (!empty($_GET['pinHash'])) {
 								'&redirect_uri=https://'.$domain.'/welcome.php">
 								Click here to send pin transaction with SteemConnect!</a></h4>
 							</div>';
-						$uriStr = "?steemName".$_GET['steemName']."&pinHash".$_GET['pinHash'].
+						$uriStr = "?steemName".$steemName."&pinHash".$pinHash..
 							"&pinSubmit=#pin-form";
 						$uriLen = strlen($uriStr);
 					} else {
 						echo '';
 					}
 				?>
-
-			<div id="pinBar" style="display:none">
-				<div class="progress">
-					<div class="progress-bar progress-bar-striped progress-bar-animated" 
-					role="progressbar" aria-valuenow="100" aria-valuemin="0" 
-					aria-valuemax="100" style="width: 100%"></div>
-				</div>
-				<br>
 			</div>
-
 			<br />
 		</form>
 		</div>
