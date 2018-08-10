@@ -10,7 +10,7 @@
 		After chatting with a few Steemians (cryptocurrency earing content creators), 
 		it was clear that the developer was not the only one looking for a more 
 		natural way to use IPFS. We are still a very new project with lots of 
-		milestones we what to reach to provide as much value for "Archivanauts" all 
+		milestones we what to reach to provide as much value for "Nebunauts" all 
 		around the galaxy. A long-term milestone for Nebulus is to turn it into 
 		a federated service because what's the point if everything hinges on a single 
 		server.</p>

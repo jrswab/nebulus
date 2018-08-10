@@ -35,7 +35,7 @@ if (!empty($_GET['pinHash'])) {
 			<h2>Welcome to Nebulus.</h2>
 			<h4>More features are coming soon so make sure to join us on 
 			<a href="https://discord.gg/dKDuaST" target="_blank">Discord</a> and 
-			meet all the other Archivonauts!</h4>
+			meet all the other Nebunauts!</h4>
 		</div>
 		<br>
 
@@ -84,7 +84,7 @@ if (!empty($_GET['pinHash'])) {
 			<br>
 			
 			<button id="pinClick" class="btn btn-secondary btn-lg 
-				btn-block" name="pinSubmit" type="submit">Grab SteemConnet Link</button>
+				btn-block" name="pinSubmit" type="submit">Grab SteemConnect Link</button>
 
 				<?php 
 					// Build SteemConnect Link
@@ -99,7 +99,7 @@ if (!empty($_GET['pinHash'])) {
 								<h4><a onclick="pin()" 
 								href="https://steemconnect.com/sign/transfer?to=nebulus&amount=1.000+STEEM&from='
 								.$steemName.'&memo=pin+'.$pinHash.
-								'&redirect_uri=https://'.$domain.'/execs/pin.php?pinHash='.$pinHash.'">
+								'&redirect_uri=https://'.$domain.'/welcome.php">
 								Click here to send pin transaction with SteemConnect!</a></h4>
 							</div>';
 						$uriStr = "?steemName".$_GET['steemName']."&pinHash".$_GET['pinHash'].
