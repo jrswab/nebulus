@@ -88,28 +88,26 @@ if (!empty($_GET['pinHash'])) {
 
 				<?php 
 					// Build SteemConnect Link
-					$pinHash = htmlspecialchars($_GET['pinHash']);
-					$steemName = htmlspecialchars($_GET['steemName']);
+					// $pinHash defined above
+					// $steemName defined above
 					$domain = htmlspecialchars($_SERVER['HTTP_HOST']);
+					$info = array('to' => 'nebulus', 'from' => $steemName, 
+						'amount' => '1.000 STEEM', 'memo' => 'pin '.$pinHash, 
+						'redirect_uri' => 'https://'.$domain.'/welcome.php');
+					$sc2Link = http_build_query($info);
 
 					// make sure name and hash are in url
 					if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
 						echo '<br /><br />
 							<div class="text-center">
-								<h4><a onclick="pin()" 
-								href="https://steemconnect.com/sign/transfer?to=nebulus&amount=1.000+STEEM&from='
-								.$steemName.'&memo=pin+'.$pinHash.
-								'&redirect_uri=https://'.$domain.'/welcome.php">
+								<h4><a  
+								href="https://steemconnect.com/sign/transfer?'.$sc2Link.'">
 								Click here to send pin transaction with SteemConnect!</a></h4>
 							</div>';
-						$uriStr = "?steemName".$steemName."&pinHash".$pinHash..
-							"&pinSubmit=#pin-form";
-						$uriLen = strlen($uriStr);
 					} else {
 						echo '';
 					}
 				?>
-			</div>
 			<br />
 		</form>
 		</div>
@@ -190,11 +188,6 @@ if (!empty($_GET['pinHash'])) {
 			newUri = uri.slice(0, -11) + "execs/pin.php"; 
 			window.location.pathname = newUri;
 		}
-	</script>
-	<script>
-		$("#sc2").click(function() {
-			$("#pinBar").show();
-		});
 	</script>
 
 <?php include 'config/bottom.html'; ?>
