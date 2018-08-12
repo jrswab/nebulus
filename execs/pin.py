@@ -27,19 +27,14 @@ set_shared_steem_instance(steem)
 # Account to look up data
 account = Account("nebulus")
 
-# Set the number of blocks to iterate over
-blockNum = 50
+# (block limit) Hard coded until a better way is found
+bLimit = 50
 
 # Global round robin count
-roundRobin = 0
-
-def robin(blockNum):
-    global roundRobin
-    # Loop through the past 'blockNum' transaction for the account variable.
-    # Keeping it to 50 allows for a faster load time
-    # while still having good coverage
-    # may need to increase as user adoption increases
-    for blocks in account.get_account_history(-1, blockNum):
+def robin(bLimit):
+    roundRobin = 0
+    # Loop through the past 'bLimit' transaction for the account variable.
+    for blocks in account.get_account_history(-1, bLimit):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
@@ -51,54 +46,78 @@ def robin(blockNum):
     roundRobin = math.ceil((roundRobin / 3) + 1)
     return roundRobin
 
-def pin(roundRobin, blockNum):
-    # Loop through the past 'blockNum' transaction for the account variable.
+# finds the hashes to be pinned
+# pins if the turn in correct
+def pin(roundRobin, bLimit):
+    # Loop through the past 'bLimit' transaction for the account variable.
     # Keeping it to 50 allows for a faster load time
     # while still having good coverage
     # may need to increase as user adoption increases
-    for blocks in account.get_account_history(-1, blockNum):
+    for blocks in account.get_account_history(-1, bLimit):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
         trxRaw = json.loads(trx)
-        if roundRobin == 1 or roundRobin % 2 == 0:
-            if 'pin' in trx:
-                pHash = chainCheck(trxRaw)
-                out = subprocess.call("ipfs pin ls | grep '" +  pHash + "'", shell=True)
-                if out == 1:
-                    pgreped = pinAdd(pHash)
-                    if pHash in pgreped:
-                        pidKill(pgreped, pHash)
+        if 'pin ' in trx:
+            if priceCheck(trxRaw):
+                if roundRobin == 1 or roundRobin % 2 == 0:
+                    pHash = chainCheck(trxRaw)
+                    out = subprocess.call("ipfs pin ls | grep '" +  pHash + "'", shell=True)
+                    if out == 1:
+                        pgreped = pinAdd(pHash)
+                        if pHash in pgreped:
+                            pidKill(pgreped, pHash)
+                        else:
+                           print("Pinned")
                     else:
-                       print("Pinned")
-                else:
-                    print(pHash + " already pinned")
+                        print(pHash + " already pinned")
 
+# make sure the STEEM (or SBD) is the correct amount
+def priceCheck(trxRaw):
+    curr = trxRaw['amount'].split(" ")
+    amount = curr[0].split(".")
+    if int(amount[0]) == 1:
+        return True
+    else:
+        return False
+
+# Grab the IPFS hash from the memo
 def chainCheck(trxRaw):
-    memo = trxRaw["memo"]
+    memo = trxRaw['memo']
     chain = memo.split()
     pHash = str(chain[1])
     return pHash
 
 
 def pinAdd(pHash):
-    cmd = "ipfs pin add '" + pHash + "'"
-    pin = subprocess.Popen(cmd, shell=True)
-    time.sleep(10)
-    # n below tells pgrep to output the newest process starting with ipfs
-    pgreped = subprocess.check_output("pgrep -an ipfs", shell=True)
-    return pgreped
+    # place holder for sending back payment
+    if pHash is None:
+        print("No hash found")
+        return None
+    else:
+        cmd = "ipfs pin add '" + pHash + "'"
+        pin = subprocess.Popen(cmd, shell=True)
+        time.sleep(10)
+        # n below tells pgrep to output the newest process starting with ipfs
+        pgreped = subprocess.check_output("pgrep -an ipfs", shell=True)
+        if pgreped is None:
+            return None
+        else:
+            return pgreped
 
 
 def pidKill(pgreped, pHash):
-    pgrepSplit = pgreped.split(" ")
-    pid = pgrepSplit[0]
-    kill = subprocess.call("kill -9 '" + pid + "'", shell=True)
-    print("Could not pin '" + pHash + 
-            "' in alotted amount of time. Will try again later. Killed PID " 
-            + pid + ".")
+    # fail safe for not running pgreped in pinHash()
+    if pgreped is None:
+        print("Nothing to kill")
+    else:
+        pgrepSplit = pgreped.split(" ")
+        pid = pgrepSplit[0]
+        kill = subprocess.call("kill -9 '" + pid + "'", shell=True)
+        print("Could not pin '" + pHash + 
+                "' in alotted amount of time. Will try again later. Killed PID " 
+                + pid + ".")
 
 
 # Start execution
-robin(blockNum)
-pin(roundRobin, blockNum)
+pin(robin(bLimit), bLimit)
