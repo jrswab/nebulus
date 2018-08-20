@@ -31,10 +31,10 @@ account = Account("nebulus")
 bLimit = 50
 
 # Global round robin count
-def robin(bLimit):
+def robin():
     roundRobin = 0
     # Loop through the past 'bLimit' transaction for the account variable.
-    for blocks in account.get_account_history(-1, bLimit):
+    for blocks in account.get_account_history(-1, 1000):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
@@ -60,9 +60,11 @@ def pin(roundRobin, bLimit):
         trxRaw = json.loads(trx)
         if 'pin ' in trx:
             if priceCheck(trxRaw):
+                # change to random num gen instead of round robin
                 if roundRobin == 1 or roundRobin % 2 == 0:
                     pHash = chainCheck(trxRaw)
                     out = subprocess.call("ipfs pin ls | grep '" +  pHash + "'", shell=True)
+                    # create a function to skip to next if already pinned
                     if out == 1:
                         pgreped = pinAdd(pHash)
                         if pHash in pgreped:
@@ -71,13 +73,19 @@ def pin(roundRobin, bLimit):
                            print("Pinned")
                     else:
                         print(pHash + " already pinned")
+            else:
+                # send back steem if not correct
+                print("Incorrect Amount of STEEM") 
 
 # make sure the STEEM (or SBD) is the correct amount
 def priceCheck(trxRaw):
     curr = trxRaw['amount'].split(" ")
     amount = curr[0].split(".")
-    if int(amount[0]) == 1:
-        return True
+    if 'STEEM' in curr[1]:
+        if int(amount[0]) == 1:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -110,6 +118,7 @@ def pidKill(pgreped, pHash):
     # fail safe for not running pgreped in pinHash()
     if pgreped is None:
         print("Nothing to kill")
+        return None
     else:
         pgrepSplit = pgreped.split(" ")
         pid = pgrepSplit[0]
@@ -120,4 +129,5 @@ def pidKill(pgreped, pHash):
 
 
 # Start execution
-pin(robin(bLimit), bLimit)
+pin(robin(), bLimit)
+
