@@ -63,7 +63,7 @@ def pin(roundRobin, bLimit):
                 # change to random num gen instead of round robin
                 if roundRobin == 1 or roundRobin % 2 == 0:
                     pHash = chainCheck(trxRaw)
-                    out = subprocess.call("ipfs pin ls | grep '" +  pHash + "'", shell=True)
+                    out = subprocess.call("/usr/local/bin/ipfs pin ls | grep '" +  pHash + "'", shell=True)
                     # create a function to skip to next if already pinned
                     if out == 1:
                         pgreped = pinAdd(pHash)
@@ -103,9 +103,9 @@ def pinAdd(pHash):
         print("No hash found")
         return None
     else:
-        cmd = "ipfs pin add '" + pHash + "'"
+        cmd = "/usr/local/bin/ipfs pin add '" + pHash + "'"
         pin = subprocess.Popen(cmd, shell=True)
-        time.sleep(10)
+        time.sleep(60)
         # n below tells pgrep to output the newest process starting with ipfs
         pgreped = subprocess.check_output("pgrep -an ipfs", shell=True)
         if pgreped is None:
