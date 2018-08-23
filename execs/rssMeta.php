@@ -13,14 +13,17 @@ $user = htmlspecialchars($_SESSION['username']);
 $title = htmlspecialchars($_POST['title']);
 $des = htmlspecialchars($_POST['des']);
 
+$id = $_POST['rowID'];
+
 // Logging info for database containing user tables.
-include_once '../config/uploadDBconfig.php';
+include '../config/uploadDBconfig.php';
 
 // Check if a table call 'username' exists
 if ($tableCheck = $link->query("SHOW TABLES LIKE '".$user."'")) {
 	if($tableCheck->num_rows == 1) {
+		echo '';
 		// Check if the 'title' column exists
-		if($titleTest = $link->query("SELECT title FROM '".$user."'")) {
+		if($titleTest = $link->query("SELECT title FROM ".$user.";")) {
 				echo '';
 		} else {
 			// if the title  column does not exist add it and a 'des' column
@@ -33,20 +36,17 @@ if ($tableCheck = $link->query("SHOW TABLES LIKE '".$user."'")) {
 }
 
 // if the title field was not left blank
-if (!$_POST['title']) {
-	echo '';
-} else {
+if ($_POST['title']) {
 	// if the title field was filled in add it to the database.
-	$changeTitle = "UPDATE ".$user." SET title = '".$title."', date = date WHERE id = '".$_POST['rowID']."';";
+	$changeTitle = 'UPDATE '.$user.' SET title = "'.$title.'", date = date WHERE id = "'.$id.'";';
+	echo $changeTitle;
 	$link->query($changeTitle);
 }
 
 // if the description field was not left blank
-if (!$_POST['des']) {
-	echo '';
-} else {
+if ($_POST['des']) {
 	// if the descriptyon field was filled in add it to the database.
-	$changeDes = "UPDATE ".$user." SET des = '".$des."', date = date WHERE id = '".$_POST['rowID']."';";
+	$changeDes = 'UPDATE '.$user.' SET des = "'.$des.'", date = date WHERE id = "'.$id.'";';
 	$link->query($changeDes);
 }
 
