@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
 	$fileActualExt = strtolower(end($fileExt));
 
 	// allowed file extensions
-	$allowed = array('jpg', 'jpeg', 'png');
+	$allowed = array('jpg');
 
 	// check if file extension is allowed first
 	if (in_array($fileActualExt, $allowed)) {
@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
 			echo "There was an error during uploading. Please try again.";
 		}
 	} else {
-		echo "Sorry, the ".$fileActualExt." file type is not supported.";
+		echo "Sorry, the ".$fileActualExt." file type is not supported.<br />Please use .jpg, thank you.";
 	}
 }
 
