@@ -11,7 +11,7 @@ $rawUser = prev($URIArray);
 $user = htmlspecialchars($rawUser);
 
 // Get the full path to user profile photo
-$proPho = shell_exec('ls '.$dir.'uploads/profiles | grep '.$user);
+$proPho = shell_exec('ls '.$dir.'uploads/profiles/ | grep '.$user.);
 
 // if the user profile does not exist, create.
 $profile = shell_exec('ls '.$dir.'u/ | grep '.$user);
