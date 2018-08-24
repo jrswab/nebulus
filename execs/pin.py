@@ -27,9 +27,6 @@ set_shared_steem_instance(steem)
 # Account to look up data
 account = Account("nebulus")
 
-# (block limit) Hard coded until a better way is found
-bLimit = 50
-
 # Global round robin count
 def robin():
     roundRobin = 0
@@ -48,12 +45,12 @@ def robin():
 
 # finds the hashes to be pinned
 # pins if the turn in correct
-def pin(roundRobin, bLimit):
+def pin(roundRobin):
     # Loop through the past 'bLimit' transaction for the account variable.
     # Keeping it to 50 allows for a faster load time
     # while still having good coverage
     # may need to increase as user adoption increases
-    for blocks in account.get_account_history(-1, bLimit):
+    for blocks in account.get_account_history(-1, 1000):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
@@ -129,5 +126,5 @@ def pidKill(pgreped, pHash):
 
 
 # Start execution
-pin(robin(), bLimit)
+pin(robin())
 
