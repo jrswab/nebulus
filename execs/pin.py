@@ -27,14 +27,11 @@ set_shared_steem_instance(steem)
 # Account to look up data
 account = Account("nebulus")
 
-# (block limit) Hard coded until a better way is found
-bLimit = 50
-
 # Global round robin count
-def robin(bLimit):
+def robin():
     roundRobin = 0
     # Loop through the past 'bLimit' transaction for the account variable.
-    for blocks in account.get_account_history(-1, bLimit):
+    for blocks in account.get_account_history(-1, 1000):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
@@ -48,21 +45,23 @@ def robin(bLimit):
 
 # finds the hashes to be pinned
 # pins if the turn in correct
-def pin(roundRobin, bLimit):
+def pin(roundRobin):
     # Loop through the past 'bLimit' transaction for the account variable.
     # Keeping it to 50 allows for a faster load time
     # while still having good coverage
     # may need to increase as user adoption increases
-    for blocks in account.get_account_history(-1, bLimit):
+    for blocks in account.get_account_history(-1, 1000):
         # set block data into json format
         trx = json.dumps(blocks, sort_keys=True, indent=4, separators=(',', ': '))
         # allows us to call data by the json key
         trxRaw = json.loads(trx)
         if 'pin ' in trx:
             if priceCheck(trxRaw):
+                # change to random num gen instead of round robin
                 if roundRobin == 1 or roundRobin % 2 == 0:
                     pHash = chainCheck(trxRaw)
-                    out = subprocess.call("ipfs pin ls | grep '" +  pHash + "'", shell=True)
+                    out = subprocess.call("/usr/local/bin/ipfs pin ls | grep '" +  pHash + "'", shell=True)
+                    # create a function to skip to next if already pinned
                     if out == 1:
                         pgreped = pinAdd(pHash)
                         if pHash in pgreped:
@@ -71,13 +70,19 @@ def pin(roundRobin, bLimit):
                            print("Pinned")
                     else:
                         print(pHash + " already pinned")
+            else:
+                # send back steem if not correct
+                print("Incorrect Amount of STEEM") 
 
 # make sure the STEEM (or SBD) is the correct amount
 def priceCheck(trxRaw):
     curr = trxRaw['amount'].split(" ")
     amount = curr[0].split(".")
-    if int(amount[0]) == 1:
-        return True
+    if 'STEEM' in curr[1]:
+        if int(amount[0]) == 1:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -95,9 +100,9 @@ def pinAdd(pHash):
         print("No hash found")
         return None
     else:
-        cmd = "ipfs pin add '" + pHash + "'"
+        cmd = "/usr/local/bin/ipfs pin add '" + pHash + "'"
         pin = subprocess.Popen(cmd, shell=True)
-        time.sleep(10)
+        time.sleep(60)
         # n below tells pgrep to output the newest process starting with ipfs
         pgreped = subprocess.check_output("pgrep -an ipfs", shell=True)
         if pgreped is None:
@@ -110,6 +115,7 @@ def pidKill(pgreped, pHash):
     # fail safe for not running pgreped in pinHash()
     if pgreped is None:
         print("Nothing to kill")
+        return None
     else:
         pgrepSplit = pgreped.split(" ")
         pid = pgrepSplit[0]
@@ -120,4 +126,5 @@ def pidKill(pgreped, pHash):
 
 
 # Start execution
-pin(robin(bLimit), bLimit)
+pin(robin())
+
