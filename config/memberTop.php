@@ -52,10 +52,10 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 		<li class="nav-item">
 			<a class="nav-link" href="<?php echo $dir; ?>hashtable.php">Media</a>
 		</li>
-		<li>
+		<!--<li>
 			<a class="nav-link" href="<?php echo $dir; ?>u/
-			<?php echo htmlspecialchars($_SESSION['username']); ?>">Profile</a>
-		</li>
+			<?php //echo htmlspecialchars($_SESSION['username']); ?>">Profile</a>
+		</li>-->
 		<li class="nav-item">
 		<a class="nav-link" href="<?php echo $dir; ?>settings.php">
 			Settings</a>

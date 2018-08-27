@@ -7,14 +7,14 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 
 $user = htmlspecialchars($_SESSION['username']);
 $proCheck = shell_exec(escapeshellcmd('ls u/ | grep '.$user));
-
+/*
 if(!$proCheck) {
 	shell_exec(escapeshellcmd('mkdir u/'.$user));
 	shell_exec(escapeshellcmd('touch u/'.$user.'/index.php'));
 	$proPath = '"<?php require \'../../profiles.php\' ?>"';
 	shell_exec(escapeshellcmd("echo ".$proPath." >> u/".$user."/index.php"));
 }
-	
+ */	
 // if the feed.php file does not exist, create.
 $feedCheck = shell_exec(escapeshellcmd('ls '.$dir.'u/'.$user.' | grep feed'));
 if(!$feedCheck){

@@ -18,7 +18,59 @@
 		<a href="https://discord.gg/dKDuaST" target="_blank">Discord</a> 
 		and meet all the other Archivonauts!</strong>
 </div>
-<br>
+<br />
+<div id="pin-card" class="card border-dark mb-3">
+	<div class="card-header">
+			<h3>Pin Content:</h3>
+	</div>
+	<div class="card-body">
+	<form id="pin-form" action="#pin-card" method="GET">
+		<div class="text-center">
+			<h4>Steem Account<br />(without "@"):</h4>
+			<input style="width:40%;text-align:center" class="pin-card" type="text" name="steemName" 
+				placeholder="eg: jrswab" />
+			<br /><br />
+			<h4>Hash To Pin:</h4>
+			<input style="width:80%;text-align:center" class="form-input" type="text" name="pinHash" 
+				placeholder="eg: QmTFLiKypBp6RxA6L1XGDhtmMXK5DYpBnVxNcG4yp1HWVT" />
+		</div>
+		<br>
+		
+		<button id="pinClick" class="btn btn-secondary btn-lg 
+			btn-block" name="pinSubmit" type="submit">Grab SteemConnect Link</button>
+
+			<?php 
+				// Build SteemConnect Link
+				if (!empty($_GET['steemName'])) {
+					$steemName = htmlspecialchars($_GET['steemName']);
+				}
+
+				if (!empty($_GET['pinHash'])) {
+					$pinHash = htmlspecialchars($_GET['pinHash']);
+				}
+
+				$domain = htmlspecialchars($_SERVER['HTTP_HOST']);
+				$info = array('to' => 'nebulus', 'from' => $steemName, 
+					'amount' => '1.000 STEEM', 'memo' => 'pin '.$pinHash, 
+					'redirect_uri' => 'https://'.$domain.'/welcome.php');
+				$sc2Link = http_build_query($info);
+
+				// make sure name and hash are in url
+				if (!empty($_GET['steemName'] | $_GET['pinHash'])) {
+					echo '<br /><br />
+						<div class="text-center">
+							<h4><a  
+							href="https://steemconnect.com/sign/transfer?'.$sc2Link.'">
+							Click here to send pin transaction with SteemConnect!</a></h4>
+						</div>';
+				} else {
+					echo '';
+				}
+			?>
+		<br />
+	</form>
+	</div>
+</div>
 	
 	<p class="alert alert-danger"><strong>Disclaimer:</strong> Due to the 
 nature of IPFS your content may never be able to be removed entirely from 
