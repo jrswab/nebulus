@@ -19,8 +19,10 @@ In order to keep Nebulus from becoming just another "holder-of-files" make sure 
 - Python
 - Pip
   - BEEM
+
 ### Set Up A LAMP Server:
 For a great guide check out [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04)
+
 ### Configure Your php.ini file:
 1. Head to /etc/php/7.0/apache2/ (Ubutnu 16.04)
 2. Open php.ini in your text editor of choice.
