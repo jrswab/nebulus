@@ -41,7 +41,6 @@ def setStartBlock(eBlock):
 sBlock = int(getStartBlock())
 eBlock = int(setEndBlock())
 
-# TODO: start lookup chain at last stop point
 # write last block checked into a text file.
 for operation in chain.stream(opNames=['custom_json'],
         raw_ops=False, start=sBlock, stop=eBlock):
