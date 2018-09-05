@@ -1,113 +1,73 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 import subprocess
 import time
-import json
-import sys
-import os
-import math
 import random
 
-# Steem Access
-from beem import Steem
+# To escape shell strings
+from shlex import quote
+
+# BEEM modules
 from beem.account import Account
-from beem.instance import set_shared_steem_instance
-from beem.blockchain import Blockchain
 
-# grab acount private key
-with open('/var/www/wifRaw', 'r') as wifRaw:
-    wif=wifRaw.read().replace('\n', '')
-    
-# set nobroadcast always to True, when testing
-steem = Steem(
-    nobroadcast=False, # Set to false when want to go live
-    keys=[wif],
-)
-# Set steem() as shared instance
-set_shared_steem_instance(steem)
+# sent Nebulus account
+acc = Account("nebulus")
 
-# Account to look up data
-account = Account("nebulus")
-
-# finds the hashes to be pinned
-# pins if the turn in correct
-def pin():
-    # Loop through the past 1000 transactions for the account variable.
-    for blocks in account.get_account_history(-1, 1000):
-        # set block data into json format
-        trx = json.dumps(blocks, sort_keys=True, indent=4, 
-                separators=(',', ': '))
-        # allows us to call data by the json key
-        trxRaw = json.loads(trx)
-        roundRobin = random.randint(0,9)
-        if 'pin ' in trx:
-            if priceCheck(trxRaw):
-                print(roundRobin)
-                if roundRobin % 2 == 0:
-                    pHash = chainCheck(trxRaw)
-                    print(pHash)
-                    out = subprocess.call(
-                            "/usr/local/bin/ipfs pin ls | grep '" +  pHash 
-                            + "'", shell=True)
-                    # create a function to skip to next if already pinned
-                    if out == 1:
-                        pgreped = pinAdd(pHash)
-                        if pHash in pgreped:
-                            pidKill(pgreped, pHash)
-                else:
-                    print("Skipping")
-            else:
-                print("Incorrect Amount of STEEM") 
-
-# make sure the STEEM (or SBD) is the correct amount
-def priceCheck(trxRaw):
-    curr = trxRaw['amount'].split(" ")
-    amount = curr[0].split(".")
-    if 'STEEM' in curr[1]:
-        if int(amount[0]) == 1:
+# TODO: Change to be $1 usd worth of steem
+# instead of one steem.
+def priceCheck(amount):    
+    chainData = amount.split()
+    total = float(chainData[0])
+    # make sure correct currency was sent
+    if 'STEEM' in chainData[1]:
+        if total >= 1:
             return True
         else:
             return False
     else:
         return False
 
-# Grab the IPFS hash from the memo
-def chainCheck(trxRaw):
-    memo = trxRaw['memo']
-    chain = memo.split()
-    pHash = str(chain[1])
-    return pHash
+def randNum():
+    return random.randint(0, 100)
 
+# get IPFS hash from the transfer memo
+def getHash(memo):
+    ipfsHash = memo.split()
+    return ipfsHash[1]
 
-def pinAdd(pHash):
-    # place holder for sending back payment
-    if pHash is None:
-        print("No hash found")
-        return None
-    else:
-        cmd = "/usr/local/bin/ipfs pin add '" + pHash + "'"
-        print("'" + str(cmd) + "'")
-        pin = subprocess.Popen(cmd, shell=True)
-        time.sleep(5)
-        # n below tells pgrep to output the newest process starting with ipfs
-        # add specific hash to pgrep
-        pgreped = subprocess.check_output("pgrep -an '" + pHash + "'", shell=True)
-        return pgreped
+# look for hash in server
+def hashCheck(ipfsHex):
+    return subprocess.call('/usr/local/bin/ipfs pin ls | grep '
+        + format(quote(ipfsHex)), shell=True)
 
+def findPID():
+    pgrep = subprocess.check_output('pgrep -an ipfs', shell=True)
+    return str(pgrep.split()[0]).split('\'')
 
-def pidKill(pgreped, pHash):
-    # fail safe for not running pgreped in pinHash()
-    if pgreped == 1 or pgreped == 2:
-        print("Nothing to kill")
-        return None
-    else:
-        pgrepSplit = pgreped.split(" ")
-        pid = pgrepSplit[0]
-        kill = subprocess.call("kill -9 '" + pid + "'", shell=True)
-        print("Could not pin '" + pHash + 
-                "' in alotted amount of time. Will try again later. Killed PID " 
-                + pid + ".")
+def kill(pid):
+    kill = pid[1]
+    subprocess.call('kill -9 ' + format(quote(kill)), shell=True)
 
-
-# Start execution
-pin()
-
+for blocks in acc.get_account_history(-1, 500):
+    # skip any block without these parameters
+    if 'transfer' in blocks['type'] and 'pin ' in blocks['memo']:
+        if priceCheck(blocks['amount']):
+            # to keep all nodes from filling up at the same rate
+            if randNum() % 2 == 0:
+                # set current memo hash to variable
+                currHash = getHash(blocks['memo'])
+                # hashCheck == 1 tells us that the hash was not found
+                if hashCheck(currHash) == 1:
+                    pin = subprocess.Popen('/usr/local/bin/ipfs pin add ' +
+                        format(quote(currHash)), shell=True)
+                    # give ipfs time to pin hash (in seconds)
+                    # TODO: change amout for prod.
+                    time.sleep(6)
+                    # ipfs returns '0' when successful
+                    if pin == 0:
+                        # if pinned write hash to file
+                        with open('pinnedList', 'a') as list:
+                            list.write(currHash)
+                    else:
+                        # kill pin process if still running
+                        kill(findPID())
