@@ -39,7 +39,7 @@ if (!empty($_GET['pinHash'])) {
 		</div>
 		<br>
 
-	<div class="card border-dark mb-3">
+	<!-- div class="card border-dark mb-3">
 		<div class="card-header">
 			<h3>Upload Content:</h3>
 		</div>
@@ -64,7 +64,7 @@ if (!empty($_GET['pinHash'])) {
 				Upload</button><br>
 			</form>
 		</div>
-	</div>
+	</div -->
 
 	<div id="pin-card" class="card border-dark mb-3">
 		<div class="card-header">
