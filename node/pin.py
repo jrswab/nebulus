@@ -40,6 +40,21 @@ def hashCheck(ipfsHex):
     return subprocess.call('/usr/local/bin/ipfs pin ls | grep '
         + format(quote(ipfsHex)), shell=True)
 
+def checkSubProc(pin, count):
+    # if still running Popen.poll() returns None
+    # else it ouputs the returncode of the command ran.
+    if pin.poll() == None:
+        print(count)
+        # TODO: change amout for prod.
+        time.sleep(1)
+        # for looping on itself
+        count += 1
+        if count <= 119:
+            checkSubProc(pin, count)
+        else:
+            status = pin.poll()
+            return status
+
 def findPID():
     pgrep = subprocess.check_output('pgrep -an ipfs', shell=True)
     return str(pgrep.split()[0]).split('\'')
@@ -50,24 +65,26 @@ def kill(pid):
 
 for blocks in acc.get_account_history(-1, 500):
     # skip any block without these parameters
-    if 'transfer' in blocks['type'] and 'pin ' in blocks['memo']:
-        if priceCheck(blocks['amount']):
-            # to keep all nodes from filling up at the same rate
-            if randNum() % 2 == 0:
-                # set current memo hash to variable
-                currHash = getHash(blocks['memo'])
-                # hashCheck == 1 tells us that the hash was not found
-                if hashCheck(currHash) == 1:
-                    pin = subprocess.Popen('/usr/local/bin/ipfs pin add ' +
-                        format(quote(currHash)), shell=True)
-                    # give ipfs time to pin hash (in seconds)
-                    # TODO: change amout for prod.
-                    time.sleep(6)
-                    # ipfs returns '0' when successful
-                    if pin == 0:
-                        # if pinned write hash to file
-                        with open('pinnedList', 'a') as list:
-                            list.write(currHash)
-                    else:
-                        # kill pin process if still running
-                        kill(findPID())
+    # using dict.get() to avoid errors when a block
+    #   does not have a specified key.
+    if 'transfer' in blocks.get('type', 'none'):
+        if 'pin ' in blocks.get('memo', 'none'):
+            if priceCheck(blocks['amount']):
+                # to keep all nodes from filling up at the same rate
+                if randNum() % 2 == 0:
+                    # set current memo hash to variable
+                    currHash = getHash(blocks['memo'])
+                    # hashCheck == 1 tells us that the hash was not found
+                    if hashCheck(currHash) == 1:
+                        pin = subprocess.Popen('/usr/local/bin/ipfs pin add ' +
+                            format(quote(currHash)), shell=True)
+                        # give ipfs time to pin hash (in seconds)
+                        status = checkSubProc(pin, 0)
+                        # ipfs returns '0' when successful
+                        if status == 0:
+                            # if pinned write hash to file
+                            with open('hashList', 'a') as list:
+                                list.write(currHash)
+                        else:
+                            # kill pin process if still running
+                            kill(findPID())
