@@ -3,13 +3,20 @@
 from beem import Steem
 from beem.account import Account
 
-# grab steem key
-with open('/var/www/wifRaw', 'r') as wifRaw:
-    wif=wifRaw.read().replace('\n', '')
+# needed to form user data dictionary
+userFormat = ['user', 'wifLocation']
+
+# grab steem user data
+with open('config/userData', 'r') as userData:
+    steemInfo = dict(zip(userFormat,userData.read().splitlines()))
+
+# get private posting key from location
+with open(steemInfo['wifLocation'], 'r') as wifRaw:
+    wif = wifRaw.read().replace('\n', '')
 
 # set up steem keys and account name
 steem = Steem(keys=[wif])
-account = Account("jrswab", steem_instance=steem)
+account = Account(steemInfo['user'], steem_instance=steem)
 
 # Send custom json init message
 steem.custom_json('nebulus_node', '{"node": "initialized"}',
