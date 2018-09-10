@@ -7,4 +7,5 @@ backups/*
 config/uploadDBconfig.php
 config/config.php
 config/wifRaw
+node/notNeeded/*
 startipfs.php

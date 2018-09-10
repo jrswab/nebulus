@@ -42,10 +42,10 @@
 					<a class="nav-link" href="<?php echo $dir; ?>index.php"></a>
 				</li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
+			<!-- form class="form-inline my-2 my-lg-0">
 				<a href="<?php echo $dir; ?>register.php" class="btn btn-outline-danger">Register</a>&nbsp;&nbsp;
 				<a href="<?php echo $dir; ?>login.php" class="btn btn-outline-primary">Login</a>
-			</form>
+			</form-->
 		</div>
 	</nav>
 	<div id="content" class="container">

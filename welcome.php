@@ -7,14 +7,14 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 
 $user = htmlspecialchars($_SESSION['username']);
 $proCheck = shell_exec(escapeshellcmd('ls u/ | grep '.$user));
-
+/*
 if(!$proCheck) {
 	shell_exec(escapeshellcmd('mkdir u/'.$user));
 	shell_exec(escapeshellcmd('touch u/'.$user.'/index.php'));
 	$proPath = '"<?php require \'../../profiles.php\' ?>"';
 	shell_exec(escapeshellcmd("echo ".$proPath." >> u/".$user."/index.php"));
 }
-	
+
 // if the feed.php file does not exist, create.
 $feedCheck = shell_exec(escapeshellcmd('ls '.$dir.'u/'.$user.' | grep feed'));
 if(!$feedCheck){
@@ -22,7 +22,7 @@ if(!$feedCheck){
 	$feedPath = '"<?php require \'../../feeds.php\' ?>"';
 	shell_exec(escapeshellcmd("echo ".$feedPath." >> u/".$user."/feed.php"));
 }
-
+*/
 if (!empty($_GET['steemName'])) {
 	$steemName = htmlspecialchars($_GET['steemName']);
 }
@@ -39,7 +39,7 @@ if (!empty($_GET['pinHash'])) {
 		</div>
 		<br>
 
-	<div class="card border-dark mb-3">
+	<!-- div class="card border-dark mb-3">
 		<div class="card-header">
 			<h3>Upload Content:</h3>
 		</div>
@@ -64,7 +64,7 @@ if (!empty($_GET['pinHash'])) {
 				Upload</button><br>
 			</form>
 		</div>
-	</div>
+	</div -->
 
 	<div id="pin-card" class="card border-dark mb-3">
 		<div class="card-header">
