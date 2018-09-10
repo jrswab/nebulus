@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0](https://gitlab.com/jrswab/nebulus/commit/111c2c7b72466519ed62717bb652f8c8fec50f8e)
 ### Added
 - Ability to pin hashes on home page without an account
 - Node directory to hold node scripts and for future Docker file.
