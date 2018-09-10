@@ -69,6 +69,7 @@ for blocks in acc.get_account_history(-1, 500):
     #   does not have a specified key.
     if 'transfer' in blocks.get('type', 'none'):
         if 'pin ' in blocks.get('memo', 'none'):
+            # day = blocks.get('timestamp', 'none').split('T')
             if priceCheck(blocks['amount']):
                 # to keep all nodes from filling up at the same rate
                 if randNum() % 2 == 0:
