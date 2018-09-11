@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [2.0.1]()
+## Added
+- Setup script
+
 ### Changed
 - Website landing page copy.
 
@@ -14,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Node directory to hold node scripts and for future Docker file.
 - Ability to send node live status with custom json for future needs.
 - A config file to hold user info such as steem account and wif location.
+- Script to repuest payment from Nebulus
 
 ### Changed
 - pin.py to remove unneeded lines and modules
